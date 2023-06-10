@@ -71,10 +71,22 @@
  * replace hardcoded limit with extern var (silly hack, I know)
  */
 
+#ifdef __cplusplus
+#include <cstddef>
+#else
 #include <stddef.h>
+#endif  // __cplusplus
+
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
 
 extern const size_t NUM_QUITMESSAGES;  /* Calculated in dstrings.c */
 
-extern const char* const endmsg[];   /* killough 1/18/98 const added */
+extern const char* const* endmsg;   /* killough 1/18/98 const added */
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif
