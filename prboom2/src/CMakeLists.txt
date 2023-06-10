@@ -17,7 +17,7 @@ set(COMMON_SRC
     doomstat.c
     doomstat.h
     doomtype.h
-    dstrings.c
+    dstrings.cpp
     dstrings.h
     d_deh.c
     d_deh.h
@@ -316,10 +316,20 @@ function(AddGameExecutable TARGET SOURCES)
     add_definitions("-DUSE_EXPERIMENTAL_MUSIC")
 
     add_executable(${TARGET} WIN32 ${SOURCES})
+    target_compile_features(${TARGET} PRIVATE
+        c_std_99
+        cxx_std_20
+    )
+    target_compile_options(${TARGET} PRIVATE
+        $<$<COMPILE_LANGUAGE:C>:${C_WARN_FLAGS}>
+        $<$<COMPILE_LANGUAGE:CXX>:${CXX_WARN_FLAGS}>
+    )
     target_include_directories(${TARGET} PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+    target_include_directories(${TARGET} SYSTEM PRIVATE
         ${SDL2_INCLUDE_DIRS}
         ${CMAKE_BINARY_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}
     )
     target_link_libraries(${TARGET} PRIVATE
         ${SDL2_LIBRARIES}
@@ -334,44 +344,44 @@ function(AddGameExecutable TARGET SOURCES)
         RUNTIME_OUTPUT_DIRECTORY ${PRBOOM_OUTPUT_PATH}
     )
     if(SDL2_IMAGE_FOUND)
-        target_include_directories(${TARGET} PRIVATE ${SDL2_IMAGE_INCLUDE_DIRS})
+        target_include_directories(${TARGET} SYSTEM PRIVATE ${SDL2_IMAGE_INCLUDE_DIRS})
         target_link_libraries(${TARGET} PRIVATE ${SDL2_IMAGE_LIBRARIES})
     endif()
     if(SDL2_MIXER_FOUND)
-        target_include_directories(${TARGET} PRIVATE ${SDL2_MIXER_INCLUDE_DIRS})
+        target_include_directories(${TARGET} SYSTEM PRIVATE ${SDL2_MIXER_INCLUDE_DIRS})
         target_link_libraries(${TARGET} PRIVATE ${SDL2_MIXER_LIBRARIES})
     endif()
     if(PCREPOSIX_FOUND)
-        target_include_directories(${TARGET} PRIVATE ${PCRE_INCLUDE_DIR})
+        target_include_directories(${TARGET} SYSTEM PRIVATE ${PCRE_INCLUDE_DIR})
         target_link_libraries(${TARGET} PRIVATE ${PCREPOSIX_LIBRARIES})
     endif()
     ApplySDL2NetOptions(${TARGET})
     if(ZLIB_FOUND)
-        target_include_directories(${TARGET} PRIVATE ${ZLIB_INCLUDE_DIRS})
+        target_include_directories(${TARGET} SYSTEM PRIVATE ${ZLIB_INCLUDE_DIRS})
         target_link_libraries(${TARGET} PRIVATE ${ZLIB_LIBRARIES})
     endif()
     if(LIBMAD_FOUND)
-        target_include_directories(${TARGET} PRIVATE ${LIBMAD_INCLUDE_DIRS})
+        target_include_directories(${TARGET} SYSTEM PRIVATE ${LIBMAD_INCLUDE_DIRS})
         target_link_libraries(${TARGET} PRIVATE ${LIBMAD_LIBRARIES})
     endif()
     if(FLUIDSYNTH_FOUND)
-        target_include_directories(${TARGET} PRIVATE ${FLUIDSYNTH_INCLUDE_DIR})
+        target_include_directories(${TARGET} SYSTEM PRIVATE ${FLUIDSYNTH_INCLUDE_DIR})
         target_link_libraries(${TARGET} PRIVATE ${FLUIDSYNTH_LIBRARIES})
     endif()
     if(DUMB_FOUND)
-        target_include_directories(${TARGET} PRIVATE ${DUMB_INCLUDE_DIR})
+        target_include_directories(${TARGET} SYSTEM PRIVATE ${DUMB_INCLUDE_DIR})
         target_link_libraries(${TARGET} PRIVATE ${DUMB_LIBRARY})
     endif()
     if(VORBIS_FOUND)
-        target_include_directories(${TARGET} PRIVATE ${VORBIS_INCLUDE_DIR})
+        target_include_directories(${TARGET} SYSTEM PRIVATE ${VORBIS_INCLUDE_DIR})
         target_link_libraries(${TARGET} PRIVATE ${VORBISFILE_LIBRARY})
     endif()
     if(PortMidi_FOUND)
-        target_include_directories(${TARGET} PRIVATE ${PORTMIDI_INCLUDE_DIR})
+        target_include_directories(${TARGET} SYSTEM PRIVATE ${PORTMIDI_INCLUDE_DIR})
         target_link_libraries(${TARGET} PRIVATE ${PORTMIDI_LIBRARIES})
     endif()
     if(ALSA_FOUND)
-        target_include_directories(${TARGET} PRIVATE ${ALSA_INCLUDE_DIR})
+        target_include_directories(${TARGET} SYSTEM PRIVATE ${ALSA_INCLUDE_DIR})
         target_link_libraries(${TARGET} PRIVATE ${ASOUND_LIBRARY})
     endif()
     add_dependencies(${TARGET} prboomwad)

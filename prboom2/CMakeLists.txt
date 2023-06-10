@@ -202,6 +202,7 @@ configure_file(cmake/config.h.cin config.h)
 
 add_definitions(-DHAVE_CONFIG_H)
 
+include(cmake/compile_flags.cmake)
 if (MSVC)
     add_definitions("/D_CRT_SECURE_NO_WARNINGS")
 else()
