@@ -40,6 +40,10 @@
 #pragma interface
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 /* SKY, store the number for name. */
 #define SKYFLATNAME  "F_SKY1"
 
@@ -57,5 +61,9 @@ extern fixed_t freelookviewheight;
 
 /* Called whenever the view size changes. */
 void R_InitSkyMap(void);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

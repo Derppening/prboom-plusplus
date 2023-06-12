@@ -21,8 +21,7 @@
 #define __UMAPINFO_H
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 struct BossAction
@@ -73,7 +72,7 @@ void FreeMapList();
 struct MapProperty *FindProperty(struct MapEntry *map, const char *name);
 
 #ifdef __cplusplus
-}
+}  // __cplusplus
 #endif
 
 #endif

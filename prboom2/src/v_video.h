@@ -42,6 +42,10 @@
 // Needed because we are refering to patches.
 #include "r_data.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 //
 // VIDEO
 //
@@ -307,6 +311,10 @@ int V_BestColor(const unsigned char *palette, int r, int g, int b);
 
 // [FG] colored blood and gibs
 int V_BloodColor(int blood);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #ifdef GL_DOOM
 #include "gl_struct.h"

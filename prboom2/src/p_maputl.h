@@ -36,6 +36,10 @@
 
 #include "r_defs.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 /* mapblocks are used to check movement against lines and things */
 #define MAPBLOCKUNITS   128
 #define MAPBLOCKSIZE    (MAPBLOCKUNITS*FRACUNIT)
@@ -94,5 +98,9 @@ extern fixed_t openbottom;
 extern fixed_t openrange;
 extern fixed_t lowfloor;
 extern divline_t trace;
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif  /* __P_MAPUTL__ */

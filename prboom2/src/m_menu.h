@@ -36,6 +36,10 @@
 
 #include "d_event.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 //
 // MENUS
 //
@@ -183,5 +187,9 @@ typedef struct setup_menu_s
   void (*action)(void); /* killough 10/98: function to call after changing */
   const char **selectstrings; /* list of strings for choice value */
 } setup_menu_t;
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

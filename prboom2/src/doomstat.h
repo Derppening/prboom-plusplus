@@ -47,6 +47,10 @@
 #pragma interface
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 // ------------------------
 // Command line parameters.
 //
@@ -366,5 +370,9 @@ extern int monkeys, default_monkeys;
 extern int HelperThing;          // type of thing to use for helper
 
 extern dboolean forceOldBsp;
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

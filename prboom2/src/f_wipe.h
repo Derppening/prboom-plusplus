@@ -34,6 +34,10 @@
 #ifndef __F_WIPE_H__
 #define __F_WIPE_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 // e6y: resolution limitation is removed
 void R_InitMeltRes(void);
 
@@ -44,5 +48,9 @@ void R_InitMeltRes(void);
 int wipe_ScreenWipe (int ticks);
 int wipe_StartScreen(void);
 int wipe_EndScreen  (void);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

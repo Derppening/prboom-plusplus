@@ -34,6 +34,10 @@
 #include "doomtype.h"
 #include "memio.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 // Structure to hold MUS file header
 typedef struct
 {
@@ -46,5 +50,9 @@ typedef struct
 } musheader;
 
 dboolean mus2mid(MEMFILE *musinput, MEMFILE *midioutput);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif /* #ifndef MUS2MID_H */

@@ -31,6 +31,10 @@
 // scaled-down versions of the full-size DOS font (txt_font.h)
 //
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 static unsigned char small_font_data[] = {
 
     // ------ Characters 0-31 have been remade to match the ------
@@ -2873,4 +2877,6 @@ static txt_font_t small_font =
     8                    // height
 };
 
-
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus

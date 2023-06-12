@@ -42,6 +42,9 @@
 #pragma interface
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
 
 //
 // Network play related stuff.
@@ -210,5 +213,9 @@ dboolean D_NetGetWad(const char* name);
 // Netgame stuff (buffers and pointers, i.e. indices).
 extern  doomcom_t  *doomcom;
 extern  doomdata_t *netbuffer;  // This points inside doomcom.
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

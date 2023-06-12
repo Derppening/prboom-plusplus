@@ -37,6 +37,10 @@
 #include "d_ticcmd.h"
 #include "m_swap.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 enum packet_type_e {
   PKT_INIT,    // initial packet to server
   PKT_SETUP,   // game information packet
@@ -97,5 +101,9 @@ inline static void TicToRaw(void* dst, const ticcmd_t* src)
   tmp.consistancy = doom_ntohs(tmp.consistancy);
   memcpy(dst,&tmp,sizeof tmp);
 }
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif // __PROTOCOL__

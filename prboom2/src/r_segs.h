@@ -38,7 +38,15 @@
 #pragma interface
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 void R_RenderMaskedSegRange(drawseg_t *ds, int x1, int x2);
 void R_StoreWallRange(const int start, const int stop);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

@@ -38,6 +38,10 @@
 
 #include "doomdef.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 // States for the intermission
 
 typedef enum
@@ -60,5 +64,9 @@ void WI_Start(wbstartstruct_t*   wbstartstruct);
 
 // Release intermission screen memory
 void WI_End(void);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

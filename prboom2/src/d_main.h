@@ -42,6 +42,10 @@
 #pragma interface
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 /* CPhipps - removed wadfiles[] stuff to w_wad.h */
 
 extern char *basesavegame;      // killough 2/16/98: savegame path
@@ -83,5 +87,9 @@ const char *BaseName(const char *filename);
    doesn't overlap with the cfg settings */
 #define MAXLOADFILES 3
 extern const char *wad_files[MAXLOADFILES], *deh_files[MAXLOADFILES];
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

@@ -35,6 +35,10 @@
 
 #include "hu_lib.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 #define MAXTRACEITEMS 8
 
 typedef enum
@@ -93,5 +97,9 @@ void TracerAddDeathmatchStart(int num, int index);
 void TracerAddPlayerStart(int num, int index);
 int TracerGetDeathmatchStart(int index);
 int TracerGetPlayerStart(int index);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif // __HU_TRACERS__

@@ -39,6 +39,10 @@
 #pragma interface
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 /* Called by C_Ticker, can call G_PlayerExited.
  * Carries out all thinking of monsters and players. */
 
@@ -71,5 +75,9 @@ extern thinker_t thinkerclasscap[];
 
 /* cph 2002/01/13 - iterator for thinker lists */
 thinker_t* P_NextThinker(thinker_t*,th_class);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

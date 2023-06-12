@@ -38,6 +38,11 @@
 
 
 #include "doomtype.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 //
 // MISC
 //
@@ -138,5 +143,9 @@ void M_ArrayClear(array_t *data);
 void M_ArrayFree(array_t *data);
 void M_ArrayAddItem(array_t *data, void *item, int itemsize);
 void* M_ArrayGetNewItem(array_t *data, int itemsize);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

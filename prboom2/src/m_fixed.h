@@ -83,6 +83,9 @@ inline static CONSTFUNC fixed_t D_abs(fixed_t x)
  * Fixed Point Multiplication
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
 
 /* CPhipps - made __inline__ to inline, as specified in the gcc docs
  * Also made const */
@@ -120,5 +123,9 @@ static CONSTFUNC fixed_t Scale(fixed_t a, fixed_t b, fixed_t c)
 {
 	return (fixed_t)(((int_64_t)a*b)/c);
 }
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

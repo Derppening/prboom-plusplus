@@ -38,6 +38,10 @@
 #pragma interface
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 /* Persistent storage/archiving.
  * These are the load / save game routines. */
 void P_ArchivePlayers(void);
@@ -62,5 +66,9 @@ void P_UnArchiveMap(void);
 extern byte *save_p;
 void CheckSaveGame(size_t,const char*, int);              /* killough */
 #define CheckSaveGame(a) (CheckSaveGame)(a, __FILE__, __LINE__)
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

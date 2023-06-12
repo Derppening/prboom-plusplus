@@ -56,6 +56,9 @@
 #pragma interface
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
 
 //
 // Player states.
@@ -250,5 +253,8 @@ typedef struct
 
 } wbstartstruct_t;
 
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

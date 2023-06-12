@@ -39,6 +39,10 @@
 /* Needed for action function pointer handling. */
 #include "d_think.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 /********************************************************************
  * Sprite name enumeration - must match info.c                      *
  ********************************************************************/
@@ -1548,5 +1552,9 @@ typedef struct
 
 /* See p_mobj_h for addition more technical info */
 extern mobjinfo_t mobjinfo[NUMMOBJTYPES];
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

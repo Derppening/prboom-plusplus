@@ -40,6 +40,10 @@
 
 #include "r_draw.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 #define MINZ        (FRACUNIT*4)
 
 extern int r_near_clip_plane;
@@ -95,5 +99,9 @@ void R_ClearSprites(void);
 void R_DrawMasked(void);
 
 void R_SetClipPlanes(void);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

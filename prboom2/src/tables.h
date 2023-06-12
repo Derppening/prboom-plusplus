@@ -49,6 +49,10 @@
 
 #include "m_fixed.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 #define FINEANGLES              8192
 #define FINEMASK                (FINEANGLES-1)
 
@@ -93,5 +97,9 @@ extern angle_t tantoangle[SLOPERANGE+1];
 typedef int (*slope_div_fn)(unsigned int num, unsigned int den);
 int SlopeDiv(unsigned int num, unsigned int den);
 int SlopeDivEx(unsigned int num, unsigned int den);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

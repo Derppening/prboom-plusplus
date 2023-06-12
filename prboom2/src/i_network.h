@@ -34,6 +34,10 @@
 #include "config.h"
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 #ifdef USE_SDL_NET
  #include "SDL_net.h"
  #define UDP_SOCKET UDPsocket
@@ -72,3 +76,7 @@ extern int v4socket, v6socket;
 #endif
 
 extern size_t sentbytes, recvdbytes;
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus

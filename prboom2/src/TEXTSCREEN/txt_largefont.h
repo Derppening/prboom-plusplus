@@ -19,6 +19,10 @@
 // has been doubled in size to 16x32, and then manually tweaked.
 //
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 static uint8_t large_font_data[] =
 {
     // 0:
@@ -2589,3 +2593,6 @@ static txt_font_t large_font =
     32                    // height
 };
 
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus

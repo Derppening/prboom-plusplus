@@ -38,6 +38,10 @@
 #include "doomtype.h"
 #include "d_event.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 /*
  * FINALE
  */
@@ -68,5 +72,9 @@ void F_Ticker (void);
 void F_Drawer (void);
 
 void F_StartFinale (void);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

@@ -28,6 +28,10 @@
  *
  *-----------------------------------------------------------------------------*/
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 //
 // R_DrawSpan
 //
@@ -158,3 +162,7 @@ static void R_DRAWSPAN_FUNCNAME(draw_span_vars_t *dsvars)
 #undef R_DRAWSPAN_PIPELINE_BITS
 #undef R_DRAWSPAN_PIPELINE
 #undef R_DRAWSPAN_FUNCNAME
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus

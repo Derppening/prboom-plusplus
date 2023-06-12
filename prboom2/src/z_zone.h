@@ -70,6 +70,10 @@ enum {PU_FREE, PU_STATIC, PU_SOUND, PU_MUSIC, PU_LEVEL, PU_LEVSPEC, PU_CACHE,
 #define DAC(x,y)
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 void *(Z_Malloc)(size_t size, int tag, void **ptr DA(const char *, int));
 void (Z_Free)(void *ptr DA(const char *, int));
 void (Z_FreeTags)(int lowtag, int hightag DA(const char *, int));
@@ -81,6 +85,10 @@ void *(Z_Realloc)(void *p, size_t n, int tag, void **user DA(const char *, int))
 char *(Z_Strdup)(const char *s, int tag, void **user DA(const char *, int));
 void (Z_CheckHeap)(DAC(const char *,int));   // killough 3/22/98: add file/line info
 void Z_DumpHistory(char *);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #ifdef INSTRUMENTED
 /* cph - save space if not debugging, don't require file 
@@ -124,6 +132,14 @@ void Z_DumpHistory(char *);
 
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 void Z_ZoneHistory(char *);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

@@ -34,6 +34,10 @@
 #ifndef __Z_BMALLOC__
 #define __Z_BMALLOC__
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 struct block_memory_alloc_s {
   void  *firstpool;
   size_t size;
@@ -53,5 +57,9 @@ inline static void* Z_BCalloc(struct block_memory_alloc_s *pzone)
 { void *p = Z_BMalloc(pzone); memset(p,0,pzone->size); return p; }
 
 void Z_BFree(struct block_memory_alloc_s *pzone, void* p);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif //__Z_BMALLOC__

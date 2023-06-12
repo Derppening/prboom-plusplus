@@ -40,6 +40,10 @@
 #pragma interface
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 void P_SetupLevel(int episode, int map, int playermask, skill_t skill);
 void P_Init(void);               /* Called by startup code. */
 
@@ -57,5 +61,9 @@ extern mobj_t   **blocklinks;    /* for thing chains */
 // MAES: extensions to support 512x512 blockmaps.
 extern int blockmapxneg;
 extern int blockmapyneg;
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

@@ -40,6 +40,10 @@
 #pragma interface
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 /*
  * Experimental stuff.
  * To compile this as "ANSI C with classes"
@@ -92,5 +96,9 @@ typedef struct thinker_s
    */
   unsigned references;
 } thinker_t;
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

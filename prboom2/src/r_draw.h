@@ -40,6 +40,10 @@
 #pragma interface
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 enum column_pipeline_e {
   RDC_PIPELINE_STANDARD,
   RDC_PIPELINE_TRANSLUCENT,
@@ -171,5 +175,9 @@ void R_DrawViewBorder(void);
 // which gets rid of the unnecessary reset of various variables during
 // column drawing.
 void R_ResetColumnBuffer(void);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

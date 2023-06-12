@@ -41,6 +41,10 @@
 #pragma interface
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 extern int r_frame_count;
 
 //
@@ -176,5 +180,9 @@ extern int viewport[4];
 extern float modelMatrix[16];
 extern float projMatrix[16];
 int R_Project(float objx, float objy, float objz, float *winx, float *winy, float *winz);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

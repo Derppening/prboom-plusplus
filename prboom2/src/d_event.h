@@ -38,6 +38,10 @@
 
 #include "doomtype.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 
 //
 // Event handling.
@@ -125,5 +129,9 @@ BT_WEAPONMASK_OLD   = (8+16+32),//e6y
 //
 
 extern gameaction_t gameaction;
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

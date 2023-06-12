@@ -36,6 +36,10 @@
 
 #include <stdarg.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 typedef enum                /* Logical output levels */
 {
   LO_INFO=1,                /* One of these is used in each physical output    */
@@ -62,4 +66,9 @@ void I_Error(const char *error, ...) __attribute__((format(printf,1,2)));
 
 int doom_vsnprintf(char *buf, size_t max, const char *fmt, va_list va);
 int doom_snprintf(char *buf, size_t max, const char *fmt, ...) __attribute__((format(printf,3,4)));
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
+
 #endif

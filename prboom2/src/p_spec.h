@@ -36,6 +36,10 @@
 #include "r_defs.h"
 #include "d_player.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 //      Define values for map objects
 #define MO_TELEPORTMAN  14
 
@@ -1161,5 +1165,9 @@ int P_ActivateInStasisCeiling
 ( line_t* line );
 
 mobj_t* P_GetPushThing(int);                                // phares 3/23/98
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

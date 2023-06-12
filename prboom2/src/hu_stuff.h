@@ -35,6 +35,10 @@
 
 #include "d_event.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 /*
  * Globally visible constants.
  */
@@ -121,5 +125,9 @@ typedef struct crosshair_s
 extern crosshair_t crosshair;
 
 int SetCustomMessage(int plr, const char *msg, int delay, int ticks, int cm, int sfx);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

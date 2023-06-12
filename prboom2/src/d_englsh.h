@@ -36,6 +36,10 @@
 #ifndef __D_ENGLSH__
 #define __D_ENGLSH__
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 /* d_main.c */
 #define D_DEVSTR    "Development mode ON.\n"
 #define D_CDROM     "CD-ROM Version: default.cfg from c:\\doomdata\n"
@@ -707,5 +711,8 @@
 #define CC_CYBER  "THE CYBERDEMON"
 #define CC_HERO "OUR HERO"
 
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

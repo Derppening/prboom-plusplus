@@ -44,6 +44,10 @@
 #include "l_soundgen.h"
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 extern int snd_pcspeaker;
 extern int lowpass_filter;
 
@@ -161,5 +165,9 @@ extern const char *snd_midiplayer;
 extern const char *midiplayers[];
 
 void M_ChangeMIDIPlayer(void);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

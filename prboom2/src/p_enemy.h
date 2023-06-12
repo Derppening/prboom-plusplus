@@ -38,6 +38,10 @@
 
 #include "p_mobj.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 void P_NoiseAlert (mobj_t *target, mobj_t *emmiter);
 void P_SpawnBrainTargets(void); /* killough 3/26/98: spawn icon landings */
 
@@ -119,5 +123,9 @@ void A_BetaSkullAttack(mobj_t *); // killough 10/98: beta lost souls attacked di
 void A_Stop(mobj_t *);
 
 void A_SkullPop(mobj_t *);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif // __P_ENEMY__

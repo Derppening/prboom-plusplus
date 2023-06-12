@@ -36,6 +36,10 @@
 #ifndef __I_MAIN__
 #define __I_MAIN__
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 //
 // e6y: exeptions handling
 //
@@ -71,5 +75,9 @@ void I_Init(void);
 void I_SafeExit(int rc);
 
 extern int (*I_GetTime)(void);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

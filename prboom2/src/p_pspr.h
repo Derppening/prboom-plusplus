@@ -53,6 +53,10 @@
 #pragma interface
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 /*
  * Frame flags:
  * handles maximum brightness (torches, muzzle flare, light sources)
@@ -126,5 +130,9 @@ void A_BFGsound();
 void A_FireBFG();
 void A_BFGSpray();
 void A_FireOldBFG();
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

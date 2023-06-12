@@ -37,6 +37,10 @@
 
 #include "doomstat.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 extern int movement_smooth_default;
 extern int movement_smooth;
 extern dboolean isExtraDDisplay;
@@ -67,5 +71,9 @@ void R_RestoreInterpolations();
 void R_ActivateSectorInterpolations();
 void R_ActivateThinkerInterpolations(thinker_t *th);
 void R_StopInterpolationIfNeeded(thinker_t *th);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

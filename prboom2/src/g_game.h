@@ -36,6 +36,10 @@
 #include "d_event.h"
 #include "d_ticcmd.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 //
 // GAME
 //
@@ -245,5 +249,9 @@ extern dboolean done_autoswitch;
 
 #define singleplayer (!demorecording && !demoplayback && !democontinue && !netgame)
 #define comperr(i) (default_comperr[i] && !demorecording && !demoplayback && !democontinue && !netgame)
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

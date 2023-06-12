@@ -39,6 +39,10 @@
 #include "hu_lib.h"
 #include "r_demo.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 #define HU_HUDADDX (HU_HUDX)
 #define HU_HUDADDY (HU_HUDY+(-1)*HU_GAPY)
 #define HU_CENTERMSGX (320/2)
@@ -355,5 +359,9 @@ void I_Warning(const char *message, ...);
 int I_MessageBox(const char* text, unsigned int type);
 
 dboolean SmoothEdges(unsigned char * buffer,int w, int h);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

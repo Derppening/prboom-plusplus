@@ -41,6 +41,10 @@
 #pragma interface
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 //
 //MUSINFO lump
 //
@@ -62,5 +66,9 @@ extern musinfo_t musinfo;
 void S_ParseMusInfo(const char *mapid);
 void MusInfoThinker(mobj_t *thing);
 void T_MAPMusic(void);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

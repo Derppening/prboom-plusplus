@@ -38,6 +38,10 @@
 #pragma interface
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 #define MAX_CHANNELS 32
 
 //
@@ -100,5 +104,9 @@ extern int numChannels;
 
 //jff 3/17/98 holds last IDMUS number, or -1
 extern int idmusnum;
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

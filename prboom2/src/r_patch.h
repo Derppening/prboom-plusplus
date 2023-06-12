@@ -32,6 +32,10 @@
 #ifndef R_PATCH_H
 #define R_PATCH_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 // Used to specify the sloping of the top and bottom of a column post
 typedef enum {
   RDRAW_EDGESLOPE_TOP_UP   = (1<<0),
@@ -113,5 +117,9 @@ const rcolumn_t *R_GetPatchColumn(const rpatch_t *patch, int columnIndex);
 
 void R_InitPatches();
 void R_FlushAllPatches();
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

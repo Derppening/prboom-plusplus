@@ -59,6 +59,10 @@
 
 #include "doomtype.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 #if !defined(GL_DEPTH_STENCIL_EXT)
 #define GL_DEPTH_STENCIL_EXT              0x84F9
 #endif
@@ -187,5 +191,9 @@ typedef enum
   TM_INVERTOPAQUE = TMF_INVERTBIT | TMF_OPAQUEBIT,
 } tex_mode_e;
 void SetTextureMode(tex_mode_e type);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif // _GL_OPENGL_H

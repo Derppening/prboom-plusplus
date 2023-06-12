@@ -42,6 +42,10 @@
 #ifndef __D_DEH__
 #define __D_DEH__
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 extern int deh_apply_cheats;
 
 void ProcessDehFile(const char *filename, const char *outfilename, int lumpnum);
@@ -1122,5 +1126,9 @@ extern const char* savegamename;
 void D_BuildBEXTables(void);
 void deh_changeCompTranslucency(void);
 void deh_applyCompatibility(void);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

@@ -37,6 +37,10 @@
 #include "r_defs.h"
 #include "d_player.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 #define USERANGE        (64*FRACUNIT)
 #define MELEERANGE      (64*FRACUNIT)
 #define MISSILERANGE    (32*64*FRACUNIT)
@@ -96,5 +100,9 @@ extern mobj_t *crosshair_target;
 extern msecnode_t *sector_list;                             // phares 3/16/98
 extern fixed_t tmbbox[4];         // phares 3/20/98
 extern line_t *blockline;   // killough 8/11/98
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif // __P_MAP__

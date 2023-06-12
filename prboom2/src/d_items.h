@@ -41,6 +41,9 @@
 #pragma interface
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
 
 /* Weapon info: sprite frames, ammunition use. */
 typedef struct
@@ -56,5 +59,9 @@ typedef struct
 
 extern  weaponinfo_t    weaponinfo[NUMWEAPONS+2];
 extern int ammopershot[NUMWEAPONS+2];
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

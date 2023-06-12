@@ -36,6 +36,10 @@
 
 #include <SDL_opengl.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 extern int nodesVersion;
 
 typedef enum {
@@ -297,5 +301,9 @@ void gld_AddNiceThing(int type, float x, float y, float radius, float angle,
                      unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 void gld_DrawNiceThings(int fx, int fy, int fw, int fh);
 void gld_ClearNiceThings(void);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif // _GL_STRUCT_H

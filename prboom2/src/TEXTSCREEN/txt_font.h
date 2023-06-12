@@ -20,6 +20,10 @@
 #ifndef __FONT_H__
 #define __FONT_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 static unsigned char main_font_data[] =
 {
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -542,6 +546,10 @@ static txt_font_t main_font =
     8,                // width
     16                // height
 };
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif /* __FONT_H__ */
 

@@ -37,6 +37,10 @@
 #include "v_video.h"
 #include "xs_Float.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 #define MAXCOORD (32767.0f / MAP_COEFF)
 
 #define SMALLDELTA 0.001f
@@ -585,5 +589,9 @@ int glsl_IsActive(void);
 #define glsl_SetLightLevel(lightlevel)
 
 #endif // USE_SHADERS
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif // _GL_INTERN_H

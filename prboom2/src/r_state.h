@@ -43,6 +43,10 @@
 #pragma interface
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 
 //
 // Refresh internal data structures,
@@ -121,5 +125,9 @@ extern int              rw_angle1;
 
 extern visplane_t       *floorplane;
 extern visplane_t       *ceilingplane;
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

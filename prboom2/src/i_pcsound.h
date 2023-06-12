@@ -26,6 +26,10 @@
 #ifndef __I_PCSOUND_H__
 #define __I_PCSOUND_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 int I_PCS_StartSound(int id,
                      int channel,
                      int vol,
@@ -35,6 +39,10 @@ int I_PCS_StartSound(int id,
 void I_PCS_StopSound(int handle);
 int I_PCS_SoundIsPlaying(int handle);
 void I_PCS_InitSound(void);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif /* #ifndef __I_PCSOUND_H__ */
 

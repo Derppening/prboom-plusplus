@@ -37,6 +37,10 @@
 
 #include "doomtype.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 // killough 1/19/98: rewritten to use to use a better random number generator
 // in the new engine, although the old one is available for compatibility.
 
@@ -150,5 +154,9 @@ int P_Random(pr_class_t DA(const char *, int));
 
 // Fix randoms for demos.
 void M_ClearRandom(void);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

@@ -28,6 +28,9 @@
  *
  *-----------------------------------------------------------------------------*/
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
 
 #if (R_DRAWCOLUMN_PIPELINE_BITS == 8)
 #define SCREENTYPE byte
@@ -379,3 +382,7 @@ static void R_DRAWCOLUMN_FUNCNAME(draw_column_vars_t *dcvars)
 
 #undef R_DRAWCOLUMN_FUNCNAME
 #undef R_DRAWCOLUMN_PIPELINE
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus

@@ -41,6 +41,10 @@
 #include "d_player.h"
 #include "w_wad.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 //
 // Smooth playing stuff
 //
@@ -120,5 +124,9 @@ int IsDemoPlayback(void);
 int IsDemoContinue(void);
 
 int LoadDemo(const char *name, const byte **buffer, int *length, int *lump);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif // __R_DEMO__

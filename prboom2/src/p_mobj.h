@@ -232,6 +232,10 @@
 
 #define ALIVE(thing) ((thing->health > 0) && ((thing->flags & (MF_COUNTKILL | MF_CORPSE | MF_RESSURECTED)) == MF_COUNTKILL))
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 // killough 9/15/98: Same, but internal flags, not intended for .deh
 // (some degree of opaqueness is good, to avoid compatibility woes)
 
@@ -424,5 +428,10 @@ mobj_t* P_SpawnMapThing (const mapthing_t*  mthing, int index);
 void    P_SpawnPlayer(int n, const mapthing_t *mthing);
 void    P_CheckMissileSpawn(mobj_t*);  // killough 8/2/98
 void    P_ExplodeMissile(mobj_t*);    // killough
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
+
 #endif
 

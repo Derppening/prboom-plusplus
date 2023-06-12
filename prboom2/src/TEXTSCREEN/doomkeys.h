@@ -27,6 +27,10 @@
 #ifndef __DOOMKEYS__
 #define __DOOMKEYS__
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 //
 // DOOM keyboard definition.
 // This is the stuff configured by Setup.Exe.
@@ -95,6 +99,10 @@
 #define KEYP_PERIOD     0
 #define KEYP_EQUALS     KEY_EQUALS
 #define KEYP_ENTER      KEY_ENTER
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif          // __DOOMKEYS__
 

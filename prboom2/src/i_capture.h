@@ -31,6 +31,10 @@
 #ifndef __I_CAPTURE__
 #define __I_CAPTURE__
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 // commandlines passed to popen()
 // this one recieves raw PCM sound on stdin
 extern const char *cap_soundcommand;
@@ -59,5 +63,9 @@ void I_CaptureFrame (void);
 
 // close pipes, call muxcommand, finalize
 void I_CaptureFinish (void);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

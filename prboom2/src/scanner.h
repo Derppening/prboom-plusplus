@@ -28,6 +28,10 @@
 
 //#include <string>
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 enum
 {
 	TK_Identifier,	// Ex: SomeIdentifier
@@ -136,5 +140,9 @@ class Scanner
 
 		static void		(*error)(const char* message, ...);
 };
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif /* __SCANNER_H__ */

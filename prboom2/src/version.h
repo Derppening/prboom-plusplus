@@ -35,6 +35,14 @@
 #ifndef __DOOMVERSION__
 #define __DOOMVERSION__
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 extern const char version_date[];
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

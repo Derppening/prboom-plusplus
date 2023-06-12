@@ -31,6 +31,10 @@
 #ifndef R_FILTER_H
 #define R_FILTER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 #define DITHER_DIM 4
 
 extern byte filter_ditherMatrix[DITHER_DIM][DITHER_DIM];
@@ -170,5 +174,9 @@ byte *filter_getScale2xQuadColors(byte e, byte b, byte f, byte h, byte d);
 #define GETBLENDED32_9406(col1, col2) \
   ((((col1&0xff00ff)*15+(col2&0xff00ff))>>4)&0xff00ff) | \
   ((((col1&0x00ff00)*15+(col2&0x00ff00))>>4)&0x00ff00)
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

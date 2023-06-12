@@ -63,6 +63,10 @@
 #include "version.h"
 #include "doomtype.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 extern dboolean bfgedition;
 
 // Game mode handling - identify IWAD version
@@ -342,5 +346,9 @@ typedef enum {
 #define ORIG_FRICTION          0xE800      // original value
 #define ORIG_FRICTION_FACTOR   2048        // original value
 #define FRICTION_FLY           0xeb00
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif          // __DOOMDEF__

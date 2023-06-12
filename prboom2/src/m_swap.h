@@ -49,6 +49,10 @@
 #include "config.h"
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 /* Endianess handling. */
 
 /* cph - First the macros to do the actual byte swapping */
@@ -130,5 +134,9 @@
 
 #define LittleLong(x) doom_wtohl(x)
 #define LittleShort(x) doom_htows(x)
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

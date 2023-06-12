@@ -34,6 +34,10 @@
 #ifndef __M_CHEAT__
 #define __M_CHEAT__
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 #define CHEAT(cheat, deh_cheat, when, func, arg) \
   { cheat, deh_cheat, when, func, arg, 0, 0, \
     sizeof(cheat) - 1, 0, 0, 0, "" }
@@ -72,5 +76,9 @@ typedef struct cheatseq_s {
 extern cheatseq_t cheat[];
 
 dboolean M_FindCheats(int key);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

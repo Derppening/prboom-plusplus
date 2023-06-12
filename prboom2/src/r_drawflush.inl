@@ -28,6 +28,10 @@
  *
  *-----------------------------------------------------------------------------*/
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 #if (R_DRAWCOLUMN_PIPELINE_BITS == 8)
 #define SCREENTYPE byte
 #define TOPLEFT byte_topleft
@@ -298,3 +302,7 @@ static void R_FLUSHQUAD_FUNCNAME(void)
 #undef R_FLUSHWHOLE_FUNCNAME
 #undef R_FLUSHHEADTAIL_FUNCNAME
 #undef R_FLUSHQUAD_FUNCNAME
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus

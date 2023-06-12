@@ -40,6 +40,10 @@
 #pragma interface
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 /* killough 10/98: special mask indicates sky flat comes from sidedef */
 #define PL_SKYFLAT (0x80000000)
 
@@ -66,5 +70,9 @@ visplane_t *R_FindPlane(
 
 visplane_t *R_CheckPlane(visplane_t *pl, int start, int stop);
 visplane_t *R_DupPlane(const visplane_t *pl, int start, int stop);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

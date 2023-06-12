@@ -40,6 +40,10 @@
 #pragma interface
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 /* The data sampled per tick (single player)
  * and transmitted to other peers (multiplayer).
  * Mainly movements/button commands per game tick,
@@ -55,5 +59,9 @@ typedef struct
   byte  chatchar;
   byte  buttons;
 } ticcmd_t;
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

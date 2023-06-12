@@ -41,6 +41,10 @@
 #pragma interface
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 /* Ty 03/09/98 Moved to an int in p_inter.c for deh and externalization */
 #define MAXHEALTH maxhealth
 
@@ -72,5 +76,9 @@ extern int mega_health;
 extern int bfgcells;
 extern int monsters_infight; // e6y: Dehacked support - monsters infight
 extern int maxammo[], clipammo[];
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

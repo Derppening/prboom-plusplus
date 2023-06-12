@@ -40,6 +40,10 @@
 #include "d_event.h"
 #include "r_defs.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 // Size of statusbar.
 // Now sensitive for scaling.
 
@@ -123,5 +127,9 @@ extern const char *ammo_colour_behaviour_list[];
 extern patchnum_t grnrock;
 extern patchnum_t brdr_t, brdr_b, brdr_l, brdr_r;
 extern patchnum_t brdr_tl, brdr_tr, brdr_bl, brdr_br;
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

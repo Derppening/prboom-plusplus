@@ -46,9 +46,9 @@
 #include "v_video.h"
 #include "SDL.h"
 
-#ifdef __GNUG__
-#pragma interface
-#endif
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
 
 extern int render_vsync;
 extern int render_screen_multiply;
@@ -116,5 +116,9 @@ extern int vanilla_keymap;
 
 extern dboolean window_focused;
 void UpdateGrab(void);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

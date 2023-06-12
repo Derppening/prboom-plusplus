@@ -39,6 +39,10 @@
 #include "config.h"
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 #ifndef __BYTEBOOL__
 #define __BYTEBOOL__
 /* Fixed to use builtin bool type with C++. */
@@ -171,5 +175,9 @@ enum patch_translation_e {
   VPT_TRANS   = 512, // Translate image via a translation table
   VPT_NOOFFSET = 1024,
 };
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

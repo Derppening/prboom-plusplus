@@ -1,6 +1,10 @@
 #ifndef __SC_MAN__
 #define __SC_MAN__
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 void SC_OpenLump(const char *name);
 void SC_OpenLumpByNum(int lump);
 void SC_Close(void);
@@ -22,5 +26,9 @@ extern int sc_Line;
 extern dboolean sc_End;
 extern dboolean sc_Crossed;
 extern dboolean sc_FileScripts;
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif // __SC_MAN__

@@ -38,6 +38,10 @@
 #include "doomdata.h"
 #include "p_maputl.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 typedef struct overrun_param_s
 {
   int warn;
@@ -135,5 +139,9 @@ int DonutOverrun(fixed_t *pfloorheight, short *pfloorpic);
 
 int MissedBackSideOverrun(line_t *line);
 sector_t* GetSectorAtNullAddress(void);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif // __G_OVERFLOW__

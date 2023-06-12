@@ -35,6 +35,10 @@
 #ifndef __SOUNDS__
 #define __SOUNDS__
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 //
 // SoundFX struct.
 //
@@ -504,5 +508,9 @@ typedef enum {
 
   NUMSFX
 } sfxenum_t;
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

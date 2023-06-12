@@ -40,6 +40,10 @@
 #include "config.h"
 #include "doomtype.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 //
 // Map level types.
 // The following data structures define the persistent format
@@ -248,5 +252,9 @@ typedef struct {
 #ifdef _MSC_VER
 #pragma pack(pop)
 #endif //_MSC_VER
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif // __DOOMDATA__

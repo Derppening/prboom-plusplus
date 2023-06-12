@@ -38,6 +38,10 @@
 #include "r_defs.h"
 #include "v_video.h"  // color ranges
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 //
 // Background and foreground screen numbers
 //
@@ -205,5 +209,9 @@ void STlib_initBinIcon
 void STlib_updateBinIcon
 ( st_binicon_t* bi,
   dboolean refresh );
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

@@ -31,6 +31,10 @@
  *
  *-----------------------------------------------------------------------------*/
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 extern int joybfire;
 extern int joybstrafe;
 extern int joybstrafeleft;
@@ -47,3 +51,7 @@ extern int usejoystick;
 
 void I_InitJoystick(void);
 void I_PollJoystick(void);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus

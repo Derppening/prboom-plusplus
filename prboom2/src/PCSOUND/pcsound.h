@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 2007 Simon Howard
@@ -26,6 +26,10 @@
 #ifndef PCSOUND_H
 #define PCSOUND_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 #define PCSOUND_8253_FREQUENCY 1193280
 
 typedef struct pcsound_driver_s pcsound_driver_t;
@@ -42,6 +46,10 @@ struct pcsound_driver_s
 
 int PCSound_Init(pcsound_callback_func callback_func);
 void PCSound_Shutdown(void);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif /* #ifndef PCSOUND_H */
 
