@@ -2,14 +2,12 @@
 import csv
 import codecs
 import os
-import urllib2
+from urllib.request import urlopen
+from urllib.error import HTTPError
 import shutil
 import zipfile
 import sys
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
+from io import BytesIO
 try:
     import subprocess
 except ImportError:
@@ -40,7 +38,7 @@ def getFileFromZip(filename, filepath, package):
         for name in package.namelist():
             if not name.lower().endswith('.zip'):
                 continue
-            data = StringIO(package.read(name))
+            data = BytesIO(package.read(name))
             try:
                 subpackage = zipfile.ZipFile(data, 'r')
             except zipfile.BadZipfile:
@@ -75,12 +73,12 @@ def getPathToFile(name, path):
             url = '/'.join(parts)
             if not url.startswith('http://') \
                and not url.startswith('ftp://'):
-                raise ValueError, "unknown url '%s'" % url
-            print "Fetching %s" % url
+                raise ValueError("unknown url '%s'" % url)
+            print("Fetching %s" % url)
             try:
-                request = urllib2.urlopen(url)
-            except urllib2.HTTPError:
-                print "Error retriving the file."
+                request = urlopen(url)
+            except HTTPError:
+                print("Error retriving the file.")
                 return None
             dst = open(path, 'wb')
             shutil.copyfileobj(request, dst)
@@ -125,23 +123,23 @@ def runtest(iwad, demo, demopath, pwad):
     if pwad is not None and pwad != '':
         options.extend(('-file', pwad))
     cmd = ' '.join(options)
-    print cmd
+    print(cmd)
     if sys.platform == 'win32':
         p = subprocess.call(options)
         try:
             results = open(os.path.join(basepath, 'release', 'stderr.txt'),'rU').readlines()
             results = [x.strip() for x in results if x.strip()]
             if len(results):
-                print results[-1]
+                print(results[-1])
         except IOError:
-            print "couldn't open stderr.txt"
+            print("couldn't open stderr.txt")
     else:
         p = subprocess.Popen(options, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (stdout, stderr) = p.communicate()
         results = stderr.split('\n')
         results = [x.strip() for x in results if x.strip()]
         if len(results):
-            print results[-1]
+            print(results[-1])
 
 def getBasePath():
     curpath = os.path.join(os.getcwd(), __file__)
@@ -163,7 +161,7 @@ def run():
     global basepath
     basepath = getBasePath()
     if basepath is None:
-        raise ValueError, "Can't determine base path"
+        raise ValueError("Can't determine base path")
     for demospec in iterDemoSpecs(os.path.join(basepath, 'tests', 'demo-testing.csv')):
         os.chdir(os.path.join(basepath, 'tests'))
         demoname, demopath = demospec['Demo'], demospec['Demo URL']
