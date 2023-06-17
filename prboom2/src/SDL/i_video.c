@@ -104,7 +104,7 @@ static void ActivateMouse(void);
 static void DeactivateMouse(void);
 //static int AccelerateMouse(int val);
 static void I_ReadMouse(void);
-static dboolean MouseShouldBeGrabbed();
+static dboolean MouseShouldBeGrabbed(void);
 static void UpdateFocus(void);
 
 int gl_colorbuffer_bits=16;
@@ -1572,7 +1572,7 @@ static void I_ReadMouse(void)
   }
 }
 
-static dboolean MouseShouldBeGrabbed()
+static dboolean MouseShouldBeGrabbed(void)
 {
   // never grab the mouse when in screensaver mode
 

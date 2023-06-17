@@ -229,7 +229,7 @@ void e6y_assert(const char *format, ...)
  * in some cases. Added checks to prevent this.
  * Example: glboom.exe -record mydemo -playdemo demoname
  */
-void ParamsMatchingCheck()
+void ParamsMatchingCheck(void)
 {
   dboolean recording_attempt = 
     M_CheckParm("-record") || 

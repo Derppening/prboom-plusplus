@@ -92,8 +92,8 @@ void M_ChangeLightMode(void);
 extern int gl_detail_maxdist;
 extern int gl_allow_detail_textures;
 
-void gld_InitVertexData();
-void gld_CleanVertexData();
+void gld_InitVertexData(void);
+void gld_CleanVertexData(void);
 void gld_UpdateSplitData(sector_t *sector);
 
 extern int gl_boom_colormaps;
@@ -125,7 +125,7 @@ void gld_CleanMemory(void);
 void gld_CleanStaticMemory(void);
 void gld_PreprocessLevel(void);
 
-void gld_Set2DMode();
+void gld_Set2DMode(void);
 void gld_InitDrawScene(void);
 void gld_StartDrawScene(void);
 void gld_AddPlane(int subsectornum, visplane_t *floor, visplane_t *ceiling);
@@ -134,7 +134,7 @@ void gld_ProjectSprite(mobj_t* thing, int lightlevel);
 void gld_DrawScene(player_t *player);
 void gld_EndDrawScene(void);
 void gld_ProcessExtraAlpha(void);
-void gld_Finish();
+void gld_Finish(void);
 
 //stuff
 extern int gl_color_mip_levels;

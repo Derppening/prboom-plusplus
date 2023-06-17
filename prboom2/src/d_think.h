@@ -50,7 +50,7 @@ extern "C" {
 typedef  void (*actionf_t)();
 
 //e6y: for boom's friction code
-typedef  void (*actionf_v)();
+typedef  void (*actionf_v)(void);
 typedef  void (*actionf_p1)( void* );
 typedef  void (*actionf_p2)( void*, void* );
 

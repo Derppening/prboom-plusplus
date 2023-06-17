@@ -177,10 +177,10 @@ extern char hud_centermsg[80];
 
 void e6y_assert(const char *format, ...);
 
-void ParamsMatchingCheck();
+void ParamsMatchingCheck(void);
 void e6y_InitCommandLine(void);
 
-void P_WalkTicker ();
+void P_WalkTicker (void);
 void P_SyncWalkcam(dboolean sync_coords, dboolean sync_sight);
 void P_ResetWalkcam(void);
 

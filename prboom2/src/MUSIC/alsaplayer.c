@@ -513,13 +513,13 @@ static void alsa_midi_evt_start (unsigned long when)
   snd_seq_ev_set_subs(&seq_ev);
 }
 
-static void alsa_midi_evt_finish ()
+static void alsa_midi_evt_finish (void)
 {
   CHK_LPRINT_ERR(snd_seq_event_output(seq_handle, &seq_ev),
     LO_WARN, "alsa_midi_evt_finish: could not output alsa midi event: %s\n");
 }
 
-static void alsa_midi_evt_flush ()
+static void alsa_midi_evt_flush (void)
 {
   CHK_LPRINT_ERR(snd_seq_drain_output(seq_handle),
     LO_WARN, "alsa_midi_evt_finish: could not drain alsa sequencer output: %s\n");

@@ -1497,7 +1497,7 @@ static void AutoLoadWADs(const char *path)
 
 // auto-loading of .wad files.
 
-void D_AutoloadIWadDir()
+void D_AutoloadIWadDir(void)
 {
   int iter;
   char *base;
@@ -1518,7 +1518,7 @@ void D_AutoloadIWadDir()
   }
 }
 
-static void D_AutoloadPWadDir()
+static void D_AutoloadPWadDir(void)
 {
   int iter;
   char *base;
@@ -1561,7 +1561,7 @@ static void AutoLoadPatches(const char *path)
 
 // auto-loading of .deh files.
 
-static void D_AutoloadDehDir()
+static void D_AutoloadDehDir(void)
 {
   int iter;
   char *base;
@@ -1582,7 +1582,7 @@ static void D_AutoloadDehDir()
   }
 }
 
-static void D_AutoloadDehPWadDir()
+static void D_AutoloadDehPWadDir(void)
 {
   int iter;
   char *base;

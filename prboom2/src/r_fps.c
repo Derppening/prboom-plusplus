@@ -191,7 +191,7 @@ void R_InterpolateView(player_t *player, fixed_t frac)
   }
 }
 
-void R_ResetViewInterpolation ()
+void R_ResetViewInterpolation (void)
 {
   NoInterpolateView = true;
 }
@@ -312,7 +312,7 @@ static void R_DoAnInterpolation (int i, fixed_t smoothratio)
 #endif
 }
 
-void R_UpdateInterpolations()
+void R_UpdateInterpolations(void)
 {
   int i;
   if (!movement_smooth)
@@ -499,7 +499,7 @@ void R_RestoreInterpolations(void)
   }
 }
 
-void R_ActivateSectorInterpolations()
+void R_ActivateSectorInterpolations(void)
 {
   int i;
   sector_t     *sec;

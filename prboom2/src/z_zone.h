@@ -67,7 +67,7 @@ enum {PU_FREE, PU_STATIC, PU_SOUND, PU_MUSIC, PU_LEVEL, PU_LEVSPEC, PU_CACHE,
 #define DAC(x,y) x,y
 #else
 #define DA(x,y) 
-#define DAC(x,y)
+#define DAC(x,y) void
 #endif
 
 #ifdef __cplusplus

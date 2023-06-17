@@ -61,6 +61,9 @@ extern "C" {
 #define FF_FULLBRIGHT   0x8000  /* flag in thing->frame */
 #define FF_FRAMEMASK    0x7fff
 
+typedef struct mobj_s mobj_t;
+typedef struct player_s player_t;
+
 /*
  * Overlay psprites are scaled shapes
  * drawn directly on the view screen,
@@ -102,30 +105,30 @@ void P_SetupPsprites(struct player_s *curplayer);
 void P_MovePsprites(struct player_s *curplayer);
 void P_DropWeapon(struct player_s *player);
 
-void A_Light0();
-void A_WeaponReady();
-void A_Lower();
-void A_Raise();
-void A_Punch();
-void A_ReFire();
-void A_FirePistol();
-void A_Light1();
-void A_FireShotgun();
-void A_Light2();
-void A_FireShotgun2();
-void A_CheckReload();
-void A_OpenShotgun2();
-void A_LoadShotgun2();
-void A_CloseShotgun2();
-void A_FireCGun();
-void A_GunFlash();
-void A_FireMissile();
-void A_Saw();
-void A_FirePlasma();
-void A_BFGsound();
-void A_FireBFG();
-void A_BFGSpray();
-void A_FireOldBFG();
+void A_Light0(player_t *player, pspdef_t *psp);
+void A_WeaponReady(player_t *player, pspdef_t *psp);
+void A_Lower(player_t *player, pspdef_t *psp);
+void A_Raise(player_t *player, pspdef_t *psp);
+void A_Punch(player_t *player, pspdef_t *psp);
+void A_ReFire(player_t *player, pspdef_t *psp);
+void A_FirePistol(player_t *player, pspdef_t *psp);
+void A_Light1(player_t *player, pspdef_t *psp);
+void A_FireShotgun(player_t *player, pspdef_t *psp);
+void A_Light2(player_t *player, pspdef_t *psp);
+void A_FireShotgun2(player_t *player, pspdef_t *psp);
+void A_CheckReload(player_t *player, pspdef_t *psp);
+void A_OpenShotgun2(player_t *player, pspdef_t *psp);
+void A_LoadShotgun2(player_t *player, pspdef_t *psp);
+void A_CloseShotgun2(player_t *player, pspdef_t *psp);
+void A_FireCGun(player_t *player, pspdef_t *psp);
+void A_GunFlash(player_t *player, pspdef_t *psp);
+void A_FireMissile(player_t *player, pspdef_t *psp);
+void A_Saw(player_t *player, pspdef_t *psp);
+void A_FirePlasma(player_t *player, pspdef_t *psp);
+void A_BFGsound(player_t *player, pspdef_t *psp);
+void A_FireBFG(player_t *player, pspdef_t *psp);
+void A_BFGSpray(mobj_t* mo);
+void A_FireOldBFG(player_t *player, pspdef_t *psp);
 
 #ifdef __cplusplus
 }  // extern "C"

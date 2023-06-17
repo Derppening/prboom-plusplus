@@ -4357,7 +4357,7 @@ void doom_printf(const char *s, ...)
 }
 
 //e6y
-void P_WalkTicker()
+void P_WalkTicker(void)
 {
   int strafe;
   int speed;
