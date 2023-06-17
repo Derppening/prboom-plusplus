@@ -40,10 +40,6 @@
 #include "r_state.h"
 #include "r_patch.h"
 
-#ifdef __GNUG__
-#pragma interface
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif  // __cplusplus

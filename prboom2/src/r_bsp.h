@@ -34,10 +34,6 @@
 #ifndef __R_BSP__
 #define __R_BSP__
 
-#ifdef __GNUG__
-#pragma interface
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif  // __cplusplus

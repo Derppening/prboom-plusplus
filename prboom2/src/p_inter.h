@@ -37,10 +37,6 @@
 #include "d_player.h"
 #include "p_mobj.h"
 
-#ifdef __GNUG__
-#pragma interface
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif  // __cplusplus

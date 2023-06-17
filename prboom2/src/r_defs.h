@@ -48,10 +48,6 @@
 // SECTORS do store MObjs anyway.
 #include "p_mobj.h"
 
-#ifdef __GNUG__
-#pragma interface
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif  // __cplusplus

@@ -36,11 +36,7 @@
 #include "doomtype.h"
 #include "info.h"
 
-#ifdef __GNUG__
-#pragma implementation "d_items.h"
-#endif
 #include "d_items.h"
-
 
 //
 // PSPRITE ACTIONS for waepons.

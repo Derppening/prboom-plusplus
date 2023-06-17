@@ -38,10 +38,6 @@
 #include "d_event.h"
 #include "w_wad.h"
 
-#ifdef __GNUG__
-#pragma interface
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif  // __cplusplus

@@ -36,10 +36,6 @@
 
 #include "r_data.h"
 
-#ifdef __GNUG__
-#pragma interface
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif  // __cplusplus

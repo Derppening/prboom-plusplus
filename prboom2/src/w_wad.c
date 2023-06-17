@@ -51,9 +51,6 @@
 #include "i_system.h"
 #include "r_main.h"
 
-#ifdef __GNUG__
-#pragma implementation "w_wad.h"
-#endif
 #include "w_wad.h"
 #include "lprintf.h"
 

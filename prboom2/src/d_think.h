@@ -36,10 +36,6 @@
 #ifndef __D_THINK__
 #define __D_THINK__
 
-#ifdef __GNUG__
-#pragma interface
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif  // __cplusplus
