@@ -36,6 +36,7 @@ struct MapEntry
 	char *mapname;
 	char *levelname;
 	char *label;
+	char *author;
 	char *intertext;
 	char *intertextsecret;
 	char levelpic[9];
