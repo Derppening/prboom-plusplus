@@ -45,12 +45,15 @@ extern "C" {
 
 #ifndef __BYTEBOOL__
 #define __BYTEBOOL__
-/* Fixed to use builtin bool type with C++. */
-#ifdef __cplusplus
-typedef bool dboolean;
-#else
-typedef enum {false, true} dboolean;
+
+#ifndef __cplusplus
+#include <stdbool.h>
 #endif
+
+// TODO(Derppening): Change this to bool when ready - Too many places cast dboolean* into int*, which breaks when using
+//  bool instead of int
+//typedef bool dboolean;
+typedef int dboolean;
 typedef unsigned char byte;
 #endif
 
