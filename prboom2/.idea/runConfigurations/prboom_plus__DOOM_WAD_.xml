@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="prboom-plus [DOOM.WAD]" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="-iwad $USER_HOME$/.config/gzdoom/DOOM.WAD" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="PrBoom-Plus" TARGET_NAME="prboom-plus" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="PrBoom-Plus" RUN_TARGET_NAME="prboom-plus">
+    <method v="2">
+      <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+    </method>
+  </configuration>
+</component>
