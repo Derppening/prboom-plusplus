@@ -415,6 +415,11 @@ function(AddGameExecutable TARGET SOURCES)
 endfunction()
 
 AddGameExecutable(prboom-plus "${PRBOOM_PLUS_SOURCES}")
+AddGameExecutable(prboom-plus-sanitized "${PRBOOM_PLUS_SOURCES}")
+target_compile_options(prboom-plus-sanitized PRIVATE
+        ${INSTRUMENTATION_FLAGS})
+target_link_options(prboom-plus-sanitized PRIVATE
+        -fsanitize=${SANITIZERS})
 
 
 # PrBoom-Plus server executable

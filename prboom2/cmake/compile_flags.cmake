@@ -15,7 +15,7 @@ endif()
 
 # Flags that enable sanitization
 if (NOT DEFINED SANITIZERS)
-    set(SANITIZERS "address,leak,undefined")
+    set(SANITIZERS "leak,undefined")
 endif (NOT DEFINED SANITIZERS)
 set(INSTRUMENTATION_FLAGS -fsanitize=${SANITIZERS} -fstack-check -fstack-protector-all -fno-omit-frame-pointer)
 
