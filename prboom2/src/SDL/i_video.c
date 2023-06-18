@@ -50,7 +50,7 @@
 #include <unistd.h>
 #endif
 
-#include "SDL.h"
+#include <SDL.h>
 //e6y
 #ifdef _WIN32
 #include <SDL_syswm.h>
@@ -104,7 +104,7 @@ static void ActivateMouse(void);
 static void DeactivateMouse(void);
 //static int AccelerateMouse(int val);
 static void I_ReadMouse(void);
-static dboolean MouseShouldBeGrabbed(void);
+static dboolean MouseShouldBeGrabbed();
 static void UpdateFocus(void);
 
 int gl_colorbuffer_bits=16;
@@ -1572,7 +1572,7 @@ static void I_ReadMouse(void)
   }
 }
 
-static dboolean MouseShouldBeGrabbed(void)
+static dboolean MouseShouldBeGrabbed()
 {
   // never grab the mouse when in screensaver mode
 

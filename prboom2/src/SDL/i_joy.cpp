@@ -35,17 +35,17 @@
 #ifndef lint
 #endif /* lint */
 
-#include <stdlib.h>
+#include <cstdlib>
 
-#include "SDL.h"
-#include "doomdef.h"
-#include "doomtype.h"
-#include "m_argv.h"
 #include "d_event.h"
 #include "d_main.h"
+#include "doomdef.h"
+#include "doomtype.h"
 #include "i_joy.h"
-#include "lprintf.h"
 #include "i_system.h"
+#include "lprintf.h"
+#include "m_argv.h"
+#include <SDL.h>
 
 int joyleft;
 int joyright;
@@ -55,62 +55,75 @@ int joydown;
 int usejoystick;
 
 #ifdef HAVE_SDL_JOYSTICKGETAXIS
-static SDL_Joystick *joystick;
+namespace {
+SDL_Joystick* joystick;
+}  // namespace
 #endif
 
-static void I_EndJoystick(void)
-{
+namespace {
+static void I_EndJoystick() {
   lprintf(LO_DEBUG, "I_EndJoystick : closing joystick\n");
 }
+}  // namespace
 
-void I_PollJoystick(void)
-{
+void I_PollJoystick(void) {
 #ifdef HAVE_SDL_JOYSTICKGETAXIS
-  event_t ev;
-  Sint16 axis_value;
+  if (usejoystick == 0 || joystick == nullptr) {
+    return;
+  }
 
-  if (!usejoystick || (!joystick)) return;
-  ev.type = ev_joystick;
-  ev.data1 =
-    (SDL_JoystickGetButton(joystick, 0)<<0) |
-    (SDL_JoystickGetButton(joystick, 1)<<1) |
-    (SDL_JoystickGetButton(joystick, 2)<<2) |
-    (SDL_JoystickGetButton(joystick, 3)<<3) |
-    (SDL_JoystickGetButton(joystick, 4)<<4) |
-    (SDL_JoystickGetButton(joystick, 5)<<5) |
-    (SDL_JoystickGetButton(joystick, 6)<<6) |
-    (SDL_JoystickGetButton(joystick, 7)<<7);
-  axis_value = SDL_JoystickGetAxis(joystick, 0) / 3000;
-  if (abs(axis_value)<7) axis_value=0;
+  event_t ev{
+      .type = ev_joystick,
+      .data1 = {},
+      .data2 = {},
+      .data3 = {}
+  };
+
+  for (int i = 0; i < 7; ++i) {
+    ev.data1 |= SDL_JoystickGetButton(joystick, i) << i;
+  }
+
+  Sint16 axis_value = SDL_JoystickGetAxis(joystick, 0) / 3000;
+  if (std::abs(axis_value) < 7) {
+    axis_value = 0;
+  }
   ev.data2 = axis_value;
+
   axis_value = SDL_JoystickGetAxis(joystick, 1) / 3000;
-  if (abs(axis_value)<7) axis_value=0;
+  if (std::abs(axis_value) < 7) {
+    axis_value = 0;
+  }
   ev.data3 = axis_value;
 
   D_PostEvent(&ev);
 #endif
 }
 
-void I_InitJoystick(void)
-{
+void I_InitJoystick() {
 #ifdef HAVE_SDL_JOYSTICKGETAXIS
   const char* fname = "I_InitJoystick : ";
-  int num_joysticks;
 
-  if (!usejoystick) return;
-  SDL_InitSubSystem(SDL_INIT_JOYSTICK);
-  num_joysticks=SDL_NumJoysticks();
-  if (M_CheckParm("-nojoy") || (usejoystick>num_joysticks) || (usejoystick<0)) {
-    if ((usejoystick > num_joysticks) || (usejoystick < 0))
-      lprintf(LO_WARN, "%sinvalid joystick %d\n", fname, usejoystick);
-    else
-      lprintf(LO_INFO, "%suser disabled\n", fname);
+  if (usejoystick == 0) {
     return;
   }
-  joystick=SDL_JoystickOpen(usejoystick-1);
-  if (!joystick)
+
+  SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+  const int num_joysticks = SDL_NumJoysticks();
+
+  if (M_CheckParm("-nojoy") || (usejoystick > num_joysticks) || (usejoystick < 0)) {
+    if ((usejoystick > num_joysticks) || (usejoystick < 0)) {
+      lprintf(LO_WARN, "%sinvalid joystick %d\n", fname, usejoystick);
+    } else {
+      lprintf(LO_INFO, "%suser disabled\n", fname);
+    }
+
+    return;
+  }
+
+  joystick = SDL_JoystickOpen(usejoystick - 1);
+  if (joystick == nullptr) {
     lprintf(LO_ERROR, "%serror opening joystick %d\n", fname, usejoystick);
-  else {
+  } else {
     I_AtExit(I_EndJoystick, true);
     lprintf(LO_INFO, "%sopened %s\n", fname, SDL_JoystickName(joystick));
     joyup = 32767;

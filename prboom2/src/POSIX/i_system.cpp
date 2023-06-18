@@ -7,7 +7,7 @@
  *  Copyright (C) 1999 by
  *  id Software, Chi Hoang, Lee Killough, Jim Flynn, Rand Phares, Ty Halderman
  *  Copyright (C) 1999-2006 by Colin Phipps, Florian Schulze
- *  
+ *
  *  Copyright 2005, 2006 by
  *  Florian Schulze, Colin Phipps, Neil Stevens, Andrey Budko
  *
@@ -37,63 +37,50 @@
 #include "config.h"
 #endif
 
-#include <stdio.h>
+#include <cstdio>
+#include <cstring>
 
-#include <stdarg.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/time.h>
-#include <ctype.h>
-#include <signal.h>
-#include <string.h>
+#include <chrono>
+#include <format>
+#include <thread>
 
-#include "doomtype.h"
-#include "m_fixed.h"
-#include "i_system.h"
 #include "doomdef.h"
-
-#ifdef __GNUG__
-#pragma implementation "i_system.h"
-#endif
 #include "i_system.h"
 
-void I_uSleep(unsigned long usecs)
-{
-#ifdef HAVE_USLEEP
-  usleep(usecs);
-#else
-  /* Fall back on select(2) */
-  struct timeval tv = { usecs / 1000000, usecs % 1000000 };
-  select(0,NULL,NULL,NULL,&tv);
-#endif
+void I_uSleep(const unsigned long usecs) {
+  namespace chrono = std::chrono;
+
+  std::this_thread::sleep_for(chrono::microseconds{usecs});
 }
 
-/* CPhipps - believe it or not, it is possible with consecutive calls to 
- * gettimeofday to receive times out of order, e.g you query the time twice and 
+/* CPhipps - believe it or not, it is possible with consecutive calls to
+ * gettimeofday to receive times out of order, e.g you query the time twice and
  * the second time is earlier than the first. Cheap'n'cheerful fix here.
  * NOTE: only occurs with bad kernel drivers loaded, e.g. pc speaker drv
  */
 
-static unsigned long lasttimereply;
-static unsigned long basetime;
+namespace {
+unsigned long lasttimereply;
+unsigned long basetime;
+}  // namespace
 
-int I_GetTime_RealTime (void)
-{
-  struct timeval tv;
-  struct timezone tz;
-  unsigned long thistimereply;
+auto I_GetTime_RealTime() -> int {
+  namespace chrono = std::chrono;
 
-  gettimeofday(&tv, &tz);
-
-  thistimereply = (tv.tv_sec * TICRATE + (tv.tv_usec * TICRATE) / 1000000);
+  const auto now = chrono::system_clock::now();
+  auto thistimereply = static_cast<unsigned long>(chrono::time_point_cast<chrono::milliseconds>(now).time_since_epoch().count()) * TICRATE;
 
   /* Fix for time problem */
-  if (!basetime) {
-    basetime = thistimereply; thistimereply = 0;
-  } else thistimereply -= basetime;
+  if (basetime != 0) {
+    basetime = thistimereply;
+    thistimereply = 0;
+  } else {
+    thistimereply -= basetime;
+  }
 
-  if (thistimereply < lasttimereply)
+  if (thistimereply < lasttimereply) {
     thistimereply = lasttimereply;
+  }
 
   return (lasttimereply = thistimereply);
 }
@@ -103,34 +90,37 @@ int I_GetTime_RealTime (void)
  *
  * CPhipps - extracted from G_ReloadDefaults because it is O/S based
  */
-unsigned long I_GetRandomTimeSeed(void)
-{                            
-  /* killough 3/26/98: shuffle random seed, use the clock */ 
-  struct timeval tv;
-  struct timezone tz;
-  gettimeofday(&tv,&tz);
-  return (tv.tv_sec*1000ul + tv.tv_usec/1000ul);
+auto I_GetRandomTimeSeed() -> unsigned long {
+  /* killough 3/26/98: shuffle random seed, use the clock */
+  namespace chrono = std::chrono;
+
+  const auto now = chrono::system_clock::now();
+  return static_cast<unsigned long>(chrono::time_point_cast<chrono::milliseconds>(now).time_since_epoch().count());
 }
 
 /* cphipps - I_GetVersionString
- * Returns a version string in the given buffer 
+ * Returns a version string in the given buffer
  */
-const char* I_GetVersionString(char* buf, size_t sz)
-{
-  snprintf(buf,sz,"%s v%s (%s)",PACKAGE_NAME,PACKAGE_VERSION,PACKAGE_HOMEPAGE);
+auto I_GetVersionString(char* const buf, const std::size_t sz) -> const char* {
+  const auto result = std::format_to_n(buf, sz, "{} v{} ({})", PACKAGE_NAME, PACKAGE_VERSION, PACKAGE_HOMEPAGE);
+  *result.out = '\0';
   return buf;
 }
 
 /* cphipps - I_SigString
  * Returns a string describing a signal number
  */
-const char* I_SigString(char* buf, size_t sz, int signum)
-{
+auto I_SigString(char* const buf, const std::size_t sz, int signum) -> const char* {
 #ifdef HAVE_STRSIGNAL
-  if (strsignal(signum) && strlen(strsignal(signum)) < sz)
-    strcpy(buf,strsignal(signum));
-  else
+  if (strsignal(signum) != nullptr && std::strlen(strsignal(signum)) < sz) {
+    std::strcpy(buf, strsignal(signum));
+  } else {
+    const auto result = std::format_to_n(buf, sz, "signal {}", signum);
+    *result.out = '\0';
+  }
+#else
+  const auto result = std::format_to_n(buf, sz, "signal {}", signum);
+  *result.out = '\0';
 #endif
-    sprintf(buf,"signal %d",signum);
   return buf;
 }

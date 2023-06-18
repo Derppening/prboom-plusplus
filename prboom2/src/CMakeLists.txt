@@ -194,20 +194,20 @@ set(MUS2MID_SRC
 )
 
 set(SDLDOOM_SOURCES
-    SDL/i_joy.c
-    SDL/i_main.c
-    SDL/i_network.c
-    SDL/i_sound.c
-    SDL/i_sshot.c
-    SDL/i_system.c
+    SDL/i_joy.cpp
+    SDL/i_main.cpp
+    SDL/i_network.cpp
+    SDL/i_sound.cpp
+    SDL/i_sshot.cpp
+    SDL/i_system.cpp
     SDL/i_video.c
 )
 
 set(PCSOUND_SOURCES
-    PCSOUND/pcsound.c
+    PCSOUND/pcsound.cpp
     PCSOUND/pcsound.h
-    PCSOUND/pcsound_linux.c
-    PCSOUND/pcsound_sdl.c
+    PCSOUND/pcsound_linux.cpp
+    PCSOUND/pcsound_sdl.cpp
     PCSOUND/pcsound_win32.c
 )
 
@@ -216,7 +216,7 @@ set(TEXTSCREEN_SOURCES
     TEXTSCREEN/txt_main.h
     TEXTSCREEN/txt_font.h
     TEXTSCREEN/txt_largefont.h
-    TEXTSCREEN/txt_sdl.c
+    TEXTSCREEN/txt_sdl.cpp
     TEXTSCREEN/txt_sdl.h
     TEXTSCREEN/txt_smallfont.h
 )
@@ -430,21 +430,29 @@ if(BUILD_SERVER AND SDL2_NET_FOUND)
     set(PRBOOM_PLUS_GAME_SERVER_SOURCES
         d_server.c
         protocol.h
-        SDL/i_network.c
+        SDL/i_network.cpp
     )
     if(MSVC)
         set(PRBOOM_PLUS_GAME_SERVER_SOURCES
             ${PRBOOM_PLUS_GAME_SERVER_SOURCES}
-            SDL/i_system.c
+            SDL/i_system.cpp
         )
     else()
         set(PRBOOM_PLUS_GAME_SERVER_SOURCES
             ${PRBOOM_PLUS_GAME_SERVER_SOURCES}
-            POSIX/i_system.c
+            POSIX/i_system.cpp
         )
     endif()
 
     add_executable(prboom-plus-game-server ${PRBOOM_PLUS_GAME_SERVER_SOURCES})
+    target_compile_features(prboom-plus-game-server PRIVATE
+        c_std_99
+        cxx_std_20
+    )
+    target_compile_options(prboom-plus-game-server PRIVATE
+        $<$<COMPILE_LANGUAGE:C>:${C_WARN_FLAGS}>
+        $<$<COMPILE_LANGUAGE:CXX>:${CXX_WARN_FLAGS}>
+    )
     target_include_directories(prboom-plus-game-server PRIVATE
         ${SDL2_INCLUDE_DIRS}
         ${CMAKE_BINARY_DIR}

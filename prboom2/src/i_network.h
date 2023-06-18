@@ -34,6 +34,8 @@
 #include "config.h"
 #endif
 
+#include "protocol.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif  // __cplusplus

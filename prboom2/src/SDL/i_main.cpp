@@ -45,35 +45,37 @@
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-typedef BOOL (WINAPI *SetAffinityFunc)(HANDLE hProcess, DWORD mask);
+typedef BOOL(WINAPI* SetAffinityFunc)(HANDLE hProcess, DWORD mask);
 #else
 #include <sched.h>
 #endif
 
-#include <errno.h>
+#include <cerrno>
+#include <csignal>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
+#include <algorithm>
 
 #include "TEXTSCREEN/txt_main.h"
 
-#include "doomdef.h"
-#include "m_argv.h"
 #include "d_main.h"
-#include "m_fixed.h"
-#include "i_system.h"
-#include "i_video.h"
-#include "z_zone.h"
-#include "lprintf.h"
-#include "m_random.h"
+#include "doomdef.h"
 #include "doomstat.h"
 #include "g_game.h"
-#include "m_misc.h"
-#include "i_sound.h"
 #include "i_main.h"
-#include "r_fps.h"
+#include "i_sound.h"
+#include "i_system.h"
+#include "i_video.h"
 #include "lprintf.h"
-
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "m_argv.h"
+#include "m_fixed.h"
+#include "m_misc.h"
+#include "m_random.h"
+#include "r_fps.h"
+#include "z_zone.h"
 
 #include "e6y.h"
 
@@ -84,24 +86,25 @@ typedef BOOL (WINAPI *SetAffinityFunc)(HANDLE hProcess, DWORD mask);
  * cphipps - much made static
  */
 
-static int basetime = 0;
+namespace {
+int basetime = 0;
 
-static int I_GetTime_MS(void)
-{
-  int ticks = SDL_GetTicks();
+auto I_GetTime_MS() -> int {
+  const int ticks = SDL_GetTicks();
 
-  if (basetime == 0)
+  if (basetime == 0) {
     basetime = ticks;
+  }
 
   return ticks - basetime;
 }
+}  // namespace
 
 int ms_to_next_tick;
 
-int I_GetTime_RealTime (void)
-{
-  int64_t t = I_GetTime_MS();
-  int64_t i = t * TICRATE / 1000;
+auto I_GetTime_RealTime() -> int {
+  const std::int64_t t = I_GetTime_MS();
+  const std::int64_t i = t * TICRATE / 1000;
 
   ms_to_next_tick = (i + 1) * 1000 / TICRATE - t;
   ms_to_next_tick = BETWEEN(0, 1000 / TICRATE, ms_to_next_tick);
@@ -111,10 +114,10 @@ int I_GetTime_RealTime (void)
 
 int realtic_clock_rate = 100;
 
-static int I_GetTime_Scaled(void)
-{
-  int64_t t = I_GetTime_MS();
-  int64_t i = t * TICRATE * realtic_clock_rate / 100000;
+namespace {
+auto I_GetTime_Scaled() -> int {
+  const std::int64_t t = I_GetTime_MS();
+  const std::int64_t i = t * TICRATE * realtic_clock_rate / 100000;
 
   ms_to_next_tick = (i + 1) * 100000 / realtic_clock_rate / TICRATE - t;
   ms_to_next_tick = BETWEEN(0, 100000 / realtic_clock_rate / TICRATE, ms_to_next_tick);
@@ -122,8 +125,7 @@ static int I_GetTime_Scaled(void)
   return i;
 }
 
-static int  I_GetTime_FastDemo(void)
-{
+auto I_GetTime_FastDemo() -> int {
   static int fasttic;
 
   ms_to_next_tick = 0;
@@ -131,78 +133,64 @@ static int  I_GetTime_FastDemo(void)
   return fasttic++;
 }
 
-static int I_GetTime_Error(void)
-{
+auto I_GetTime_Error() -> int {
   I_Error("I_GetTime_Error: GetTime() used before initialization");
   return 0;
 }
+}  // namespace
 
-int (*I_GetTime)(void) = I_GetTime_Error;
+int (*I_GetTime)() = I_GetTime_Error;
 
 // During a fast demo, no time elapses in between ticks
-static int I_TickElapsedTime_FastDemo(void)
-{
+namespace {
+auto I_TickElapsedTime_FastDemo() -> int {
   return 0;
 }
 
-static int I_TickElapsedTime_RealTime(void)
-{
-  return (int64_t)I_GetTime_MS() * TICRATE % 1000 * FRACUNIT / 1000;
+auto I_TickElapsedTime_RealTime() -> int {
+  return static_cast<std::int64_t>(I_GetTime_MS()) * TICRATE % 1000 * FRACUNIT / 1000;
 }
 
-static int I_TickElapsedTime_Scaled(void)
-{
-  return (int64_t)I_GetTime_MS() * realtic_clock_rate * TICRATE / 100 % 1000 * FRACUNIT / 1000;
+auto I_TickElapsedTime_Scaled() -> int {
+  return static_cast<std::int64_t>(I_GetTime_MS()) * realtic_clock_rate * TICRATE / 100 % 1000 * FRACUNIT / 1000;
 }
+}  // namespace
 
-int (*I_TickElapsedTime)(void) = I_TickElapsedTime_RealTime;
+int (*I_TickElapsedTime)() = I_TickElapsedTime_RealTime;
 
-void I_Init(void)
-{
+void I_Init() {
   /* killough 4/14/98: Adjustable speedup based on realtic_clock_rate */
-  if (fastdemo)
-  {
+  if (fastdemo) {
     I_GetTime = I_GetTime_FastDemo;
     I_TickElapsedTime = I_TickElapsedTime_FastDemo;
+  } else if (realtic_clock_rate != 100) {
+    I_GetTime = I_GetTime_Scaled;
+    I_TickElapsedTime = I_TickElapsedTime_Scaled;
+  } else {
+    I_GetTime = I_GetTime_RealTime;
+    I_TickElapsedTime = I_TickElapsedTime_RealTime;
   }
-  else
-    if (realtic_clock_rate != 100)
-      {
-        I_GetTime = I_GetTime_Scaled;
-        I_TickElapsedTime = I_TickElapsedTime_Scaled;
-      }
-    else
-    {
-      I_GetTime = I_GetTime_RealTime;
-      I_TickElapsedTime = I_TickElapsedTime_RealTime;
-    }
 
   {
     /* killough 2/21/98: avoid sound initialization if no sound & no music */
-    if (!(nomusicparm && nosfxparm))
+    if (!(nomusicparm && nosfxparm)) {
       I_InitSound();
+    }
   }
 
   R_InitInterpolation();
 }
 
-//e6y
-void I_Init2(void)
-{
-  if (fastdemo)
-  {
+// e6y
+void I_Init2() {
+  if (fastdemo) {
     I_GetTime = I_GetTime_FastDemo;
     I_TickElapsedTime = I_TickElapsedTime_FastDemo;
-  }
-  else
-  {
-    if (realtic_clock_rate != 100)
-      {
-        I_GetTime = I_GetTime_Scaled;
-        I_TickElapsedTime = I_TickElapsedTime_Scaled;
-      }
-    else
-    {
+  } else {
+    if (realtic_clock_rate != 100) {
+      I_GetTime = I_GetTime_Scaled;
+      I_TickElapsedTime = I_TickElapsedTime_Scaled;
+    } else {
       I_GetTime = I_GetTime_RealTime;
       I_TickElapsedTime = I_TickElapsedTime_RealTime;
     }
@@ -213,22 +201,23 @@ void I_Init2(void)
 
 /* cleanup handling -- killough:
  */
-static void I_SignalHandler(int s)
-{
+namespace {
+void I_SignalHandler(const int s) {
   char buf[2048];
 
-  signal(s,SIG_IGN);  /* Ignore future instances of this signal.*/
+  signal(s, SIG_IGN); /* Ignore future instances of this signal.*/
 
-  I_ExeptionProcess(); //e6y
+  I_ExeptionProcess();  // e6y
 
-  strcpy(buf,"Exiting on signal: ");
-  I_SigString(buf+strlen(buf),2000-strlen(buf),s);
+  std::strcpy(buf, "Exiting on signal: ");
+  I_SigString(buf + std::strlen(buf), 2000 - std::strlen(buf), s);
 
   /* If corrupted memory could cause crash, dump memory
    * allocation history, which points out probable causes
    */
-  if (s==SIGSEGV || s==SIGILL || s==SIGFPE)
+  if (s == SIGSEGV || s == SIGILL || s == SIGFPE) {
     Z_DumpHistory(buf);
+  }
 
   I_Error("I_SignalHandler: %s", buf);
 }
@@ -237,42 +226,33 @@ static void I_SignalHandler(int s)
 // e6y: exeptions handling
 //
 
-static ExeptionsList_t current_exception_index;
+ExeptionsList_t current_exception_index;
+}  // namespace
 
-ExeptionParam_t ExeptionsParams[EXEPTION_MAX + 1] =
-{
-  {NULL},
-  {"gld_CreateScreenSizeFBO: Access violation in glFramebufferTexture2DEXT.\n\n"
-    "Are you using ATI graphics? Try to update your drivers "
-    "or change gl_compatibility variable in cfg to 1.\n"},
-  {NULL}
-};
+ExeptionParam_t ExeptionsParams[EXEPTION_MAX + 1] = {
+    {nullptr},
+    {"gld_CreateScreenSizeFBO: Access violation in glFramebufferTexture2DEXT.\n\n"
+     "Are you using ATI graphics? Try to update your drivers "
+     "or change gl_compatibility variable in cfg to 1.\n"},
+    {nullptr}};
 
-void I_ExeptionBegin(ExeptionsList_t exception_index)
-{
-  if (current_exception_index == EXEPTION_NONE)
-  {
+void I_ExeptionBegin(ExeptionsList_t exception_index) {
+  if (current_exception_index == EXEPTION_NONE) {
     current_exception_index = exception_index;
-  }
-  else
-  {
+  } else {
     I_Error("I_SignalStateSet: signal_state set!");
   }
 }
 
-void I_ExeptionEnd(void)
-{
+void I_ExeptionEnd() {
   current_exception_index = EXEPTION_NONE;
 }
 
-void I_ExeptionProcess(void)
-{
-  if (current_exception_index > EXEPTION_NONE && current_exception_index < EXEPTION_MAX)
-  {
+void I_ExeptionProcess() {
+  if (current_exception_index > EXEPTION_NONE && current_exception_index < EXEPTION_MAX) {
     I_Error("%s", ExeptionsParams[current_exception_index].error_message);
   }
 }
-
 
 /* killough 2/22/98: Add support for ENDBOOM, which is PC-specific
  *
@@ -281,125 +261,120 @@ void I_ExeptionProcess(void)
  * CPhipps - made static
  */
 
-inline static int convert(int color, int *bold)
-{
+namespace {
+inline auto convert(int color, int* const bold) -> int {
   if (color > 7) {
     color -= 8;
     *bold = 1;
   }
+
   switch (color) {
-  case 0:
-    return 0;
-  case 1:
-    return 4;
-  case 2:
-    return 2;
-  case 3:
-    return 6;
-  case 4:
-    return 1;
-  case 5:
-    return 5;
-  case 6:
-    return 3;
-  case 7:
-    return 7;
+    case 0:
+      return 0;
+    case 1:
+      return 4;
+    case 2:
+      return 2;
+    case 3:
+      return 6;
+    case 4:
+      return 1;
+    case 5:
+      return 5;
+    case 6:
+      return 3;
+    case 7:
+      return 7;
+    default:
+      return 0;
   }
-  return 0;
 }
+}  // namespace
 
 /* CPhipps - flags controlling ENDOOM behaviour */
-enum {
-  endoom_colours = 1,
-  endoom_nonasciichars = 2,
-  endoom_droplastline = 4
-};
+enum { endoom_colours = 1, endoom_nonasciichars = 2, endoom_droplastline = 4 };
 
 int endoom_mode;
 
-static void PrintVer(void)
-{
+namespace {
+void PrintVer() {
   char vbuf[200];
-  lprintf(LO_INFO,"%s\n",I_GetVersionString(vbuf,200));
+  lprintf(LO_INFO, "%s\n", I_GetVersionString(vbuf, 200));
 }
 
 //
 // ENDOOM support using text mode emulation
 //
-static void I_EndDoom(void)
-{
-  int lump_eb, lump_ed, lump = -1;
-
-  const unsigned char *endoom_data;
-  unsigned char *screendata;
+void I_EndDoom() {
+//  const unsigned char* endoom_data;
+//  unsigned char* screendata;
 
 #ifndef _WIN32
   PrintVer();
 #endif
 
-  if (!showendoom || demorecording)
-  {
+  if (!showendoom || demorecording) {
     return;
   }
 
   /* CPhipps - ENDOOM/ENDBOOM selection */
-  lump_eb = W_CheckNumForName("ENDBOOM");/* jff 4/1/98 sign our work    */
-  lump_ed = W_CheckNumForName("ENDOOM"); /* CPhipps - also maybe ENDOOM */
+  const int lump_eb = W_CheckNumForName("ENDBOOM"); /* jff 4/1/98 sign our work    */
+  const int lump_ed = W_CheckNumForName("ENDOOM");  /* CPhipps - also maybe ENDOOM */
 
-  if (lump_eb == -1)
+  int lump;
+  if (lump_eb == -1) {
     lump = lump_ed;
-  else if (lump_ed == -1)
+  } else if (lump_ed == -1) {
     lump = lump_eb;
-  else
-  { /* Both ENDOOM and ENDBOOM are present */
-#define LUMP_IS_NEW(num) (!((lumpinfo[num].source == source_iwad) || (lumpinfo[num].source == source_auto_load)))
-    switch ((LUMP_IS_NEW(lump_ed) ? 1 : 0 ) |
-      (LUMP_IS_NEW(lump_eb) ? 2 : 0)) {
-    case 1:
-      lump = lump_ed;
-      break;
-    case 2:
-      lump = lump_eb;
-      break;
-    default:
-      /* Both lumps have equal priority, both present */
-      lump = (P_Random(pr_misc) & 1) ? lump_ed : lump_eb;
-      break;
+  } else { /* Both ENDOOM and ENDBOOM are present */
+    constexpr auto LUMP_IS_NEW = [](const int num) {
+      return lumpinfo[num].source != source_iwad && lumpinfo[num].source != source_auto_load;
+    };
+
+    switch ((LUMP_IS_NEW(lump_ed) ? 1 : 0) | (LUMP_IS_NEW(lump_eb) ? 2 : 0)) {
+      case 1:
+        lump = lump_ed;
+        break;
+      case 2:
+        lump = lump_eb;
+        break;
+      default:
+        /* Both lumps have equal priority, both present */
+        lump = (P_Random(pr_misc) & 1) != 0 ? lump_ed : lump_eb;
+        break;
     }
   }
 
-  if (lump != -1)
-  {
-    endoom_data = (const unsigned char *)W_CacheLumpNum(lump);
-    
+  if (lump != -1) {
+    const auto* endoom_data = static_cast<const unsigned char*>(W_CacheLumpNum(lump));
+
     // Set up text mode screen
     TXT_Init();
-    
+
     // Make sure the new window has the right title and icon
     I_SetWindowCaption();
     I_SetWindowIcon();
-    
+
     // Write the data to the screen memory
-    screendata = TXT_GetScreenData();
-    memcpy(screendata, endoom_data, 4000);
-    
+    unsigned char* screendata = TXT_GetScreenData();
+    std::copy_n(reinterpret_cast<const std::byte*>(endoom_data), 4000, reinterpret_cast<std::byte*>(screendata));
+
     // Wait for a keypress
-    while (true)
-    {
+    while (true) {
       TXT_UpdateScreen();
-      
-      if (TXT_GetChar() > 0)
-      {
+
+      if (TXT_GetChar() > 0) {
         break;
       }
-      
+
       TXT_Sleep(0);
     }
-    
+
     // Shut down text mode screen
     TXT_Shutdown();
   }
 }
+}  // namespace
 
 // Schedule a function to be called when the program exits.
 // If run_if_error is true, the function is called if the exit
@@ -408,25 +383,23 @@ static void I_EndDoom(void)
 
 typedef struct atexit_listentry_s atexit_listentry_t;
 
-struct atexit_listentry_s
-{
-    atexit_func_t func;
-    dboolean run_on_error;
-    atexit_listentry_t *next;
+struct atexit_listentry_s {
+  atexit_func_t func;
+  dboolean run_on_error;
+  atexit_listentry_t* next;
 };
 
-static atexit_listentry_t *exit_funcs = NULL;
+namespace {
+static atexit_listentry_t* exit_funcs = nullptr;
+}  // namespace
 
-void I_AtExit(atexit_func_t func, dboolean run_on_error)
-{
-    atexit_listentry_t *entry;
+void I_AtExit(const atexit_func_t func, const dboolean run_on_error) {
+  auto* const entry = static_cast<atexit_listentry_t*>(malloc(sizeof(atexit_listentry_t)));
 
-    entry = malloc(sizeof(*entry));
-
-    entry->func = func;
-    entry->run_on_error = run_on_error;
-    entry->next = exit_funcs;
-    exit_funcs = entry;
+  entry->func = func;
+  entry->run_on_error = run_on_error;
+  entry->next = exit_funcs;
+  exit_funcs = entry;
 }
 
 /* I_SafeExit
@@ -435,34 +408,34 @@ void I_AtExit(atexit_func_t func, dboolean run_on_error)
  * Prevent infinitely recursive exits -- killough
  */
 
-void I_SafeExit(int rc)
-{
-  atexit_listentry_t *entry;
+void I_SafeExit(const int rc) {
+  atexit_listentry_t* entry;
 
   // Run through all exit functions
 
-  while ((entry = exit_funcs))
-  {
+  while ((entry = exit_funcs)) {
     exit_funcs = exit_funcs->next;
 
-    if (rc == 0 || entry->run_on_error)
-    {
+    if (rc == 0 || entry->run_on_error) {
       entry->func();
     }
   }
 
-  exit(rc);
+  std::exit(rc);
 }
 
-static void I_Quit (void)
-{
-  if (!demorecording)
-    I_EndDoom();
-  if (demorecording)
+namespace {
+void I_Quit() {
+  if (demorecording) {
     G_CheckDemoStatus();
-  M_SaveDefaults ();
+  } else {
+    I_EndDoom();
+  }
+
+  M_SaveDefaults();
   I_DemoExShutdown();
 }
+}  // namespace
 
 #ifdef SECURE_UID
 uid_t stored_euid = -1;
@@ -472,31 +445,28 @@ uid_t stored_euid = -1;
 // Ability to use only the allowed CPUs
 //
 
-static void I_SetAffinityMask(void)
-{
+namespace {
+void I_SetAffinityMask() {
   // Forcing single core only for "SDL MIDI Player"
   process_affinity_mask = 0;
-  if (!strcasecmp(snd_midiplayer, midiplayers[midi_player_sdl]))
-  {
+  if (!strcasecmp(snd_midiplayer, midiplayers[midi_player_sdl])) {
     process_affinity_mask = 1;
   }
 
   // Set the process affinity mask so that all threads
-  // run on the same processor.  This is a workaround for a bug in 
+  // run on the same processor.  This is a workaround for a bug in
   // SDL_mixer that causes occasional crashes.
-  if (process_affinity_mask)
-  {
-    const char *errbuf = NULL;
+  if (process_affinity_mask != 0) {
+    const char* errbuf = nullptr;
 #ifdef _WIN32
     HMODULE kernel32_dll;
-    SetAffinityFunc SetAffinity = NULL;
+    SetAffinityFunc SetAffinity = nullptr;
     int ok = false;
 
     // Find the kernel interface DLL.
     kernel32_dll = LoadLibrary("kernel32.dll");
 
-    if (kernel32_dll)
-    {
+    if (kernel32_dll) {
       // Find the SetProcessAffinityMask function.
       SetAffinity = (SetAffinityFunc)GetProcAddress(kernel32_dll, "SetProcessAffinityMask");
 
@@ -504,58 +474,49 @@ static void I_SetAffinityMask(void)
       // that doesn't have this function.  That's no problem, because
       // those systems don't support SMP anyway.
 
-      if (SetAffinity)
-      {
+      if (SetAffinity) {
         ok = SetAffinity(GetCurrentProcess(), process_affinity_mask);
       }
     }
 
-    if (!ok)
-    {
+    if (!ok) {
       errbuf = WINError();
     }
 #elif defined(HAVE_SCHED_SETAFFINITY)
     // POSIX version:
-    int i;
     {
       cpu_set_t set;
 
       CPU_ZERO(&set);
 
-      for(i = 0; i < 16; i++)
-      {
-        CPU_SET((process_affinity_mask>>i)&1, &set);
+      for (int i = 0; i < 16; i++) {
+        CPU_SET((process_affinity_mask >> i) & 1, &set);
       }
 
-      if (sched_setaffinity(getpid(), sizeof(set), &set) == -1)
-      {
-        errbuf = strerror(errno);
+      if (sched_setaffinity(getpid(), sizeof(set), &set) == -1) {
+        errbuf = std::strerror(errno);
       }
     }
 #else
     return;
 #endif
 
-    if (errbuf == NULL)
-    {
+    if (errbuf == nullptr) {
       lprintf(LO_INFO, "I_SetAffinityMask: manual affinity mask is %d\n", process_affinity_mask);
-    }
-    else
-    {
+    } else {
       lprintf(LO_ERROR, "I_SetAffinityMask: failed to set process affinity mask (%s)\n", errbuf);
     }
   }
 }
+}  // namespace
 
 //
 // Sets the priority class for the prboom-plus process
 //
 
-void I_SetProcessPriority(void)
-{
-  if (process_priority)
-  {
-    const char *errbuf = NULL;
+void I_SetProcessPriority() {
+  if (process_priority != 0) {
+    const char* errbuf = nullptr;
 
 #ifdef _WIN32
     {
@@ -566,8 +527,7 @@ void I_SetProcessPriority(void)
       else if (process_priority == 2)
         dwPriorityClass = REALTIME_PRIORITY_CLASS;
 
-      if (SetPriorityClass(GetCurrentProcess(), dwPriorityClass) == 0)
-      {
+      if (SetPriorityClass(GetCurrentProcess(), dwPriorityClass) == 0) {
         errbuf = WINError();
       }
     }
@@ -575,20 +535,16 @@ void I_SetProcessPriority(void)
     return;
 #endif
 
-    if (errbuf == NULL)
-    {
+    if (errbuf == NULL) {
       lprintf(LO_INFO, "I_SetProcessPriority: priority for the process is %d\n", process_priority);
-    }
-    else
-    {
+    } else {
       lprintf(LO_ERROR, "I_SetProcessPriority: failed to set priority for the process (%s)\n", errbuf);
     }
   }
 }
 
-//int main(int argc, const char * const * argv)
-int main(int argc, char **argv)
-{
+// int main(int argc, const char * const * argv)
+auto main(int argc, char** argv) -> int {
 #ifdef SECURE_UID
   /* First thing, revoke setuid status (if any) */
   stored_euid = geteuid();
@@ -596,27 +552,27 @@ int main(int argc, char **argv)
     if (seteuid(getuid()) < 0)
       fprintf(stderr, "Failed to revoke setuid\n");
     else
-      fprintf(stderr, "Revoked uid %d\n",stored_euid);
+      fprintf(stderr, "Revoked uid %d\n", stored_euid);
 #endif
 
   myargc = argc;
-  myargv = (char**)malloc(sizeof(myargv[0]) * myargc);
-  memcpy(myargv, argv, sizeof(myargv[0]) * myargc);
+  myargv = static_cast<char**>(malloc(sizeof(myargv[0]) * myargc));
+  std::copy_n(argv, myargc, myargv);
 
   // e6y: Check for conflicts.
-  // Conflicting command-line parameters could cause the engine to be confused 
+  // Conflicting command-line parameters could cause the engine to be confused
   // in some cases. Added checks to prevent this.
   // Example: glboom.exe -record mydemo -playdemo demoname
   ParamsMatchingCheck();
 
   // e6y: was moved from D_DoomMainSetup
   // init subsystems
-  //jff 9/3/98 use logical output routine
-  lprintf(LO_INFO,"M_LoadDefaults: Load system defaults.\n");
-  M_LoadDefaults();              // load before initing other systems
+  // jff 9/3/98 use logical output routine
+  lprintf(LO_INFO, "M_LoadDefaults: Load system defaults.\n");
+  M_LoadDefaults();  // load before initing other systems
 
   /* Version info */
-  lprintf(LO_INFO,"\n");
+  lprintf(LO_INFO, "\n");
   PrintVer();
 
   /* cph - Z_Close must be done after I_Quit, so we register it first. */
@@ -637,18 +593,17 @@ int main(int argc, char **argv)
      left in an unstable state.
   */
 
-  Z_Init();                  /* 1/18/98 killough: start up memory stuff first */
+  Z_Init(); /* 1/18/98 killough: start up memory stuff first */
 
   I_AtExit(I_Quit, false);
 #ifndef PRBOOM_DEBUG
-  if (!M_CheckParm("-devparm"))
-  {
+  if (M_CheckParm("-devparm") == 0) {
     signal(SIGSEGV, I_SignalHandler);
   }
   signal(SIGTERM, I_SignalHandler);
-  signal(SIGFPE,  I_SignalHandler);
-  signal(SIGILL,  I_SignalHandler);
-  signal(SIGINT,  I_SignalHandler);  /* killough 3/6/98: allow CTRL-BRK during init */
+  signal(SIGFPE, I_SignalHandler);
+  signal(SIGILL, I_SignalHandler);
+  signal(SIGINT, I_SignalHandler); /* killough 3/6/98: allow CTRL-BRK during init */
   signal(SIGABRT, I_SignalHandler);
 #endif
 
@@ -661,6 +616,6 @@ int main(int argc, char **argv)
   /* cphipps - call to video specific startup code */
   I_PreInitGraphics();
 
-  D_DoomMain ();
+  D_DoomMain();
   return 0;
 }

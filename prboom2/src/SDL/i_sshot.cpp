@@ -36,64 +36,61 @@
 #include "config.h"
 #endif
 
-#include <stdlib.h>
+#include <cstddef>
+#include <memory>
+#include <string_view>
+#include <vector>
 
-#include "SDL.h"
+#include <SDL.h>
 
 #ifdef HAVE_LIBSDL2_IMAGE
 #include <SDL_image.h>
 #endif
 
-#include "doomstat.h"
 #include "doomdef.h"
-#include "doomtype.h"
-#include "v_video.h"
 #include "i_video.h"
-#include "z_zone.h"
-#include "lprintf.h"
+#include "v_video.h"
 
 int renderW;
 int renderH;
 
-void I_UpdateRenderSize(void)
-{
-	if (V_GetMode() == VID_MODEGL)
-	{
-		renderW = SCREENWIDTH;
-		renderH = SCREENHEIGHT;
-	}
-	else
-	{
-		SDL_GetRendererOutputSize(sdl_renderer, &renderW, &renderH);
-	}
+void I_UpdateRenderSize() {
+  if (V_GetMode() == VID_MODEGL) {
+    renderW = SCREENWIDTH;
+    renderH = SCREENHEIGHT;
+  } else {
+    SDL_GetRendererOutputSize(sdl_renderer, &renderW, &renderH);
+  }
 }
 
 //
 // I_ScreenShot // Modified to work with SDL2 resizeable window and fullscreen desktop - DTIED
 //
 
-int I_ScreenShot(const char *fname)
-{
+namespace {
+auto I_Screenshot(std::string_view fname) -> int {
   int result = -1;
-  unsigned char *pixels = I_GrabScreen();
-  SDL_Surface *screenshot = NULL;
+  auto* pixels = reinterpret_cast<std::byte*>(I_GrabScreen());
+  std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> screenshot{nullptr, SDL_FreeSurface};
 
-  if (pixels)
-  {
-	screenshot = SDL_CreateRGBSurfaceFrom(pixels, renderW, renderH, 24,
-	  renderW * 3, 0x000000ff, 0x0000ff00, 0x00ff0000, 0);
+  if (pixels != nullptr) {
+    screenshot.reset(SDL_CreateRGBSurfaceFrom(pixels, renderW, renderH, 24, renderW * 3, 0x000000ff, 0x0000ff00, 0x00ff0000, 0));
   }
 
-  if (screenshot)
-  {
+  if (screenshot) {
 #ifdef HAVE_LIBSDL2_IMAGE
-    result = IMG_SavePNG(screenshot, fname);
+    result = IMG_SavePNG(screenshot.get(), fname.data());
 #else
-    result = SDL_SaveBMP(screenshot, fname);
+    result = SDL_SaveBMP(screenshot.get(), fname.data());
 #endif
-    SDL_FreeSurface(screenshot);
   }
+
   return result;
+}
+}  // namespace
+
+auto I_ScreenShot(const char* fname) -> int {
+  return I_Screenshot(std::string_view{fname});
 }
 
 // NSM
@@ -103,33 +100,26 @@ int I_ScreenShot(const char *fname)
 // Modified to work with SDL2 resizeable window and fullscreen desktop - DTIED
 //
 
-unsigned char *I_GrabScreen(void)
-{
-  static unsigned char *pixels = NULL;
-  static int pixels_size = 0;
-  int size;
+auto I_GrabScreen() -> unsigned char* {
+  static std::vector<std::byte> pixels;
 
   I_UpdateRenderSize();
 
-  #ifdef GL_DOOM
-  if (V_GetMode() == VID_MODEGL)
-  {
+#ifdef GL_DOOM
+  if (V_GetMode() == VID_MODEGL) {
     return gld_ReadScreen();
   }
-  #endif
+#endif
 
-  size = renderW * renderH * 3;
-  if (!pixels || size > pixels_size)
-  {
-    pixels_size = size;
-    pixels = (unsigned char*)realloc(pixels, size);
+  const auto size = static_cast<std::size_t>(renderW * renderH * 3);
+  if (pixels.empty() || size > pixels.size()) {
+    pixels.resize(size);
   }
 
-  if (pixels && size)
-  {
-    SDL_Rect screen = { 0, 0, renderW, renderH };
-    SDL_RenderReadPixels(sdl_renderer, &screen, SDL_PIXELFORMAT_RGB24, pixels, renderW * 3);
+  if (!pixels.empty() && size > 0) {
+    const SDL_Rect screen{0, 0, renderW, renderH};
+    SDL_RenderReadPixels(sdl_renderer, &screen, SDL_PIXELFORMAT_RGB24, pixels.data(), renderW * 3);
   }
 
-  return pixels;
+  return reinterpret_cast<unsigned char*>(pixels.data());
 }
