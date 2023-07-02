@@ -26,6 +26,7 @@ IndentWidth: 2
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: None
 PointerAlignment: Left
+QualifierAlignment: Left
 ReflowComments: true
 SortIncludes: CaseSensitive
 SortUsingDeclarations: true
