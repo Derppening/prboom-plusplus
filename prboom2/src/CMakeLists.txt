@@ -222,28 +222,28 @@ set(TEXTSCREEN_SOURCES
 )
 
 set(DOOMMUSIC_SOURCES
-    MUSIC/dbopl.c
+    MUSIC/dbopl.cpp
     MUSIC/dbopl.h
-    MUSIC/dumbplayer.c
+    MUSIC/dumbplayer.cpp
     MUSIC/dumbplayer.h
-    MUSIC/flplayer.c
+    MUSIC/flplayer.cpp
     MUSIC/flplayer.h
-    MUSIC/madplayer.c
+    MUSIC/madplayer.cpp
     MUSIC/madplayer.h
-    MUSIC/midifile.c
+    MUSIC/midifile.cpp
     MUSIC/midifile.h
     MUSIC/musicplayer.h
-    MUSIC/opl.c
+    MUSIC/opl.cpp
     MUSIC/opl.h
-    MUSIC/oplplayer.c
+    MUSIC/oplplayer.cpp
     MUSIC/oplplayer.h
-    MUSIC/opl_queue.c
+    MUSIC/opl_queue.cpp
     MUSIC/opl_queue.h
-    MUSIC/portmidiplayer.c
+    MUSIC/portmidiplayer.cpp
     MUSIC/portmidiplayer.h
-    MUSIC/alsaplayer.c
+    MUSIC/alsaplayer.cpp
     MUSIC/alsaplayer.h
-    MUSIC/vorbisplayer.c
+    MUSIC/vorbisplayer.cpp
     MUSIC/vorbisplayer.h
 )
 

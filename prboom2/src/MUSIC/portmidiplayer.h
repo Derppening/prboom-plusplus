@@ -31,17 +31,16 @@
 #ifndef PORTMIDIPLAYER_H
 #define PORTMIDIPLAYER_H
 
+#include "musicplayer.h"
 
-
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
 
 extern const music_player_t pm_player;
 
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
-
-
-
-
-
-
-
-#endif // PORTMIDI_H
+#endif  // PORTMIDI_H

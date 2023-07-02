@@ -31,17 +31,16 @@
 #ifndef FLPLAYER_H
 #define FLPLAYER_H
 
+#include "musicplayer.h"
 
-
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
 
 extern const music_player_t fl_player;
 
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
-
-
-
-
-
-
-
-#endif // FLPLAYER_H
+#endif  // FLPLAYER_H

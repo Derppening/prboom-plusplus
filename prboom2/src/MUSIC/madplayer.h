@@ -31,16 +31,16 @@
 #ifndef MADPLAYER_H
 #define MADPLAYER_H
 
+#include "musicplayer.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
 
 extern const music_player_t mp_player;
 
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
-
-
-
-
-
-
-
-#endif // MADPLAYER_H
+#endif  // MADPLAYER_H

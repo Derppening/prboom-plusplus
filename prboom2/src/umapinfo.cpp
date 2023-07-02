@@ -24,12 +24,13 @@
 #include "umapinfo.h"
 #include "scanner.h"
 
-extern "C"
-{
 #include "m_misc.h"
 #include "g_game.h"
 #include "doomdef.h"
 #include "doomstat.h"
+
+extern "C"
+{
 
 void M_AddEpisode(const char *map, const char *gfx, const char *txt, const char *alpha);
 void M_ClearEpisodes(void);

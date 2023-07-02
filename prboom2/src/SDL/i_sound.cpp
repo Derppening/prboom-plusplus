@@ -952,7 +952,7 @@ void I_ResumeSong(const int handle) {
       I_PlaySong(handle, 1);
       break;
     case 1:
-      switch (Mix_GetMusicType(NULL)) {
+      switch (Mix_GetMusicType(nullptr)) {
         case MUS_NONE:
           break;
         case MUS_MID:
@@ -1294,7 +1294,7 @@ void Exp_PlaySong(const int handle, const int looping) {
 
 extern "C" int mus_pause_opt;  // From m_misc.c
 
-void Exp_PauseSong(const int handle) {
+void Exp_PauseSong([[maybe_unused]] const int handle) {
   if (music_handle == nullptr) {
     return;
   }
@@ -1313,7 +1313,7 @@ void Exp_PauseSong(const int handle) {
   SDL_UnlockMutex(musmutex);
 }
 
-void Exp_ResumeSong(const int handle) {
+void Exp_ResumeSong([[maybe_unused]] const int handle) {
   if (music_handle == nullptr) {
     return;
   }

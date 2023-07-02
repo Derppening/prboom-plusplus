@@ -23,40 +23,41 @@
 //
 //-----------------------------------------------------------------------------
 
-
 #ifndef OPL_OPL_H
 #define OPL_OPL_H
 
-typedef void (*opl_callback_t)(void *data);
+#include "musicplayer.h"
 
-typedef enum
-{
-    OPL_REGISTER_PORT = 0,
-    OPL_DATA_PORT = 1
-} opl_port_t;
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
 
-#define OPL_NUM_OPERATORS   21
-#define OPL_NUM_VOICES      9
+typedef void (*opl_callback_t)(void* data);
 
-#define OPL_REG_WAVEFORM_ENABLE   0x01
-#define OPL_REG_TIMER1            0x02
-#define OPL_REG_TIMER2            0x03
-#define OPL_REG_TIMER_CTRL        0x04
-#define OPL_REG_FM_MODE           0x08
+typedef enum { OPL_REGISTER_PORT = 0, OPL_DATA_PORT = 1 } opl_port_t;
+
+#define OPL_NUM_OPERATORS 21
+#define OPL_NUM_VOICES 9
+
+#define OPL_REG_WAVEFORM_ENABLE 0x01
+#define OPL_REG_TIMER1 0x02
+#define OPL_REG_TIMER2 0x03
+#define OPL_REG_TIMER_CTRL 0x04
+#define OPL_REG_FM_MODE 0x08
 
 // Operator registers (21 of each):
 
-#define OPL_REGS_TREMOLO          0x20
-#define OPL_REGS_LEVEL            0x40
-#define OPL_REGS_ATTACK           0x60
-#define OPL_REGS_SUSTAIN          0x80
-#define OPL_REGS_WAVEFORM         0xE0
+#define OPL_REGS_TREMOLO 0x20
+#define OPL_REGS_LEVEL 0x40
+#define OPL_REGS_ATTACK 0x60
+#define OPL_REGS_SUSTAIN 0x80
+#define OPL_REGS_WAVEFORM 0xE0
 
 // Voice registers (9 of each):
 
-#define OPL_REGS_FREQ_1           0xA0
-#define OPL_REGS_FREQ_2           0xB0
-#define OPL_REGS_FEEDBACK         0xC0
+#define OPL_REGS_FREQ_1 0xA0
+#define OPL_REGS_FREQ_2 0xB0
+#define OPL_REGS_FEEDBACK 0xC0
 
 //
 // Low-level functions.
@@ -69,7 +70,6 @@ int OPL_Init(unsigned int port_base);
 // Shut down the OPL subsystem.
 
 void OPL_Shutdown(void);
-
 
 // Write to one of the OPL I/O ports:
 
@@ -100,7 +100,6 @@ int OPL_Detect(void);
 
 void OPL_InitRegisters(void);
 
-
 // Block until the specified number of milliseconds have elapsed.
 
 void OPL_Delay(unsigned int ms);
@@ -109,15 +108,16 @@ void OPL_Delay(unsigned int ms);
 
 void OPL_SetPaused(int paused);
 
-
 extern unsigned int opl_sample_rate;
 
-void OPL_Render_Samples (void *dest, unsigned nsamp);
+void OPL_Render_Samples(void* dest, unsigned nsamp);
 
-
-void OPL_SetCallback(unsigned int ms, opl_callback_t callback, void *data);
+void OPL_SetCallback(unsigned int ms, opl_callback_t callback, void* data);
 
 void OPL_ClearCallbacks(void);
 
-#endif
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
+#endif

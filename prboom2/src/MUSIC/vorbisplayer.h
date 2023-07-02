@@ -28,20 +28,19 @@
  *---------------------------------------------------------------------
  */
 
-
 #ifndef VORBISPLAYER_H
 #define VORBISPLAYER_H
 
+#include "musicplayer.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
 
 extern const music_player_t vorb_player;
 
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
-
-
-
-
-
-
-
-#endif // VORBISPLAYER_H
+#endif  // VORBISPLAYER_H

@@ -31,16 +31,16 @@
 #ifndef DUMBPLAYER_H
 #define DUMBPLAYER_H
 
+#include "musicplayer.h"
 
-
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
 
 extern const music_player_t db_player;
 
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
-
-
-
-
-
-
-#endif // DUMBPLAYER_H
+#endif  // DUMBPLAYER_H

@@ -24,11 +24,19 @@
 //
 //-----------------------------------------------------------------------------
 
-
 #ifndef OPLPLAYER_H
 #define OPLPLAYER_H
 
+#include "musicplayer.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+
 extern const music_player_t opl_synth_player;
 
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
 #endif

@@ -28,9 +28,16 @@
  *---------------------------------------------------------------------
  */
 
-
 #ifndef MUSICPLAYER_H
 #define MUSICPLAYER_H
+
+#ifndef __cplusplus
+#include <stdbool.h>
+#endif  // __cplusplus
+
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
 
 /*
 Anything that implements all of these functions can play music in prboomplus.
@@ -46,11 +53,9 @@ calls to render, and not some external timing source.  That's why things stay
 synced.
 */
 
-
-typedef struct
-{
+typedef struct {
   // descriptive name of the player, such as "OPL2 Synth"
-  const char *(*name)(void);
+  const char* (*name)(void);
 
   // samplerate is in hz.  return is 1 for success
   int (*init)(int samplerate);
@@ -69,56 +74,48 @@ typedef struct
 
   // return a player-specific handle, or NULL on failure.
   // data does not belong to player, but it will persist as long as unregister is not called
-  const void *(*registersong)(const void *data, unsigned len);
+  const void* (*registersong)(const void* data, unsigned len);
 
   // deallocate structures, etc.  data is no longer valid
-  void (*unregistersong)(const void *handle);
+  void (*unregistersong)(const void* handle);
 
-  void (*play)(const void *handle, int looping);
+  void (*play)(const void* handle, int looping);
 
   // stop
   void (*stop)(void);
 
   // s16 stereo, with samplerate as specified in init.  player needs to be able to handle
   // just about anything for nsamp.  render can be called even during pause+stop.
-  void (*render)(void *dest, unsigned nsamp);
+  void (*render)(void* dest, unsigned nsamp);
 } music_player_t;
 
-
-
 // helper for deferred load dll
-
 #ifdef _MSC_VER
 #if 1
-#define TESTDLLLOAD(a,b)
+#define TESTDLLLOAD(a, b)
 #else
-#define TESTDLLLOAD(a,b)                                                           \
-  if (1)                                                                           \
-  {                                                                                \
-    HMODULE h = LoadLibrary (a);                                                   \
-    if (!h)                                                                        \
-    {                                                                              \
-      lprintf (LO_INFO, a " not found!\n");                                        \
-      return 0;                                                                    \
-    }                                                                              \
-    FreeLibrary (h);                                                               \
-    if (b && FAILED (__HrLoadAllImportsForDll (a)))                                \
-    {                                                                              \
-      lprintf (LO_INFO, "Couldn't get all symbols from " a "\n");                  \
-      return 0;                                                                    \
-    }                                                                              \
+#define TESTDLLLOAD(a, b)                                        \
+  if (1) {                                                       \
+    HMODULE h = LoadLibrary(a);                                  \
+    if (!h) {                                                    \
+      lprintf(LO_INFO, a " not found!\n");                       \
+      return 0;                                                  \
+    }                                                            \
+    FreeLibrary(h);                                              \
+    if (b && FAILED(__HrLoadAllImportsForDll(a))) {              \
+      lprintf(LO_INFO, "Couldn't get all symbols from " a "\n"); \
+      return 0;                                                  \
+    }                                                            \
   }
 #endif
 
-#else // _MSC_VER
-#define TESTDLLLOAD(a,b)
+#else  // _MSC_VER
+#define TESTDLLLOAD(a, b)
 
-#endif // _MSC_VER
+#endif  // _MSC_VER
 
+#ifdef __cplusplus
+}  // extern "C"
+#endif  // __cplusplus
 
-
-
-
-
-
-#endif // MUSICPLAYER_H
+#endif  // MUSICPLAYER_H
