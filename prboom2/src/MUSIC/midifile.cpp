@@ -70,7 +70,7 @@ constexpr auto byteswap(T value) noexcept -> T {
   return std::bit_cast<T>(value_representation);
 }
 
-constexpr auto ntohl(const unsigned long int x) -> unsigned long int {
+constexpr auto ntohl(const std::uint32_t x) -> std::uint32_t {
   if constexpr (std::endian::native == std::endian::big) {
     return x;
   } else if constexpr (std::endian::native == std::endian::little) {
@@ -80,7 +80,7 @@ constexpr auto ntohl(const unsigned long int x) -> unsigned long int {
   }
 }
 
-constexpr auto ntohs(const unsigned short int x) -> unsigned short int {
+constexpr auto ntohs(const std::uint16_t x) -> std::uint16_t {
   if constexpr (std::endian::native == std::endian::big) {
     return x;
   } else if constexpr (std::endian::native == std::endian::little) {
@@ -155,6 +155,7 @@ auto CheckChunkHeader(chunk_header_t* const chunk, const char* const expected_id
   return CheckChunkHeader(*chunk, std::string_view{expected_id});
 }
 
+// Read a single byte.  Returns nullopt on error.
 auto ReadByte(midimem_t& mf) -> std::optional<byte> {
   if (mf.pos >= mf.len) {
     lprintf(LO_WARN, "ReadByte: Unexpected end of file\n");
@@ -162,16 +163,6 @@ auto ReadByte(midimem_t& mf) -> std::optional<byte> {
   }
 
   return std::make_optional(mf.data[mf.pos++]);
-}
-
-// Read a single byte.  Returns false on error.
-[[deprecated]] auto ReadByte(byte* const result, midimem_t* const mf) -> bool {
-  const auto byte = ReadByte(*mf);
-  if (byte) {
-    *result = *byte;
-  }
-
-  return byte.has_value();
 }
 
 template<typename OutT = void*>
@@ -189,10 +180,6 @@ auto ReadMultipleBytes(const OutT dest, const std::size_t len, midimem_t& mf) ->
   }
 
   return reinterpret_cast<OutT>(cdest + len);
-}
-
-[[deprecated]] auto ReadMultipleBytes(void* const dest, const std::size_t len, midimem_t* const mf) -> bool {
-  return ReadMultipleBytes(dest, len, *mf) != nullptr;
 }
 
 // Read a variable-length value.
@@ -218,15 +205,6 @@ auto ReadVariableLength(midimem_t& mf) -> std::optional<unsigned int> {
 
   lprintf(LO_WARN, "ReadVariableLength: Variable-length value too long: maximum of four bytes\n");
   return std::nullopt;
-}
-
-[[deprecated]] auto ReadVariableLength(unsigned int* const result, midimem_t* const mf) -> bool {
-  const auto value = ReadVariableLength(*mf);
-  if (value) {
-    *result = *value;
-  }
-
-  return value.has_value();
 }
 
 // Read a byte sequence into the data buffer.
@@ -258,10 +236,6 @@ auto ReadByteSequence(const std::size_t num_bytes, midimem_t& mf) -> OutT {
   }
 
   return static_cast<OutT>(result.release());
-}
-
-[[deprecated]] auto ReadByteSequence(const unsigned int num_bytes, midimem_t* const mf) -> void* {
-  return ReadByteSequence(num_bytes, *mf);
 }
 
 // Read a MIDI channel event.
@@ -299,16 +273,6 @@ auto ReadChannelEvent(const byte event_type, const bool two_param, midimem_t& mf
   return std::make_optional(event);
 }
 
-[[deprecated]] auto
-ReadChannelEvent(midi_event_t* const event, const byte event_type, const bool two_param, midimem_t* const mf) -> bool {
-  const auto value = ReadChannelEvent(event_type, two_param, *mf);
-  if (value) {
-    *event = *value;
-  }
-
-  return value.has_value();
-}
-
 // Read sysex event:
 auto ReadSysExEvent(const int event_type, midimem_t& mf) -> std::optional<midi_event_t> {
   midi_event_t event;
@@ -331,15 +295,6 @@ auto ReadSysExEvent(const int event_type, midimem_t& mf) -> std::optional<midi_e
   }
 
   return std::make_optional(event);
-}
-
-[[deprecated]] auto ReadSysExEvent(midi_event_t* const event, const int event_type, midimem_t* const mf) -> bool {
-  const auto value = ReadSysExEvent(event_type, *mf);
-  if (value) {
-    *event = *value;
-  }
-
-  return value.has_value();
 }
 
 // Read meta event:
@@ -374,15 +329,6 @@ auto ReadMetaEvent(midimem_t& mf) -> std::optional<midi_event_t> {
   }
 
   return std::make_optional(event);
-}
-
-[[deprecated]] auto ReadMetaEvent(midi_event_t* const event, midimem_t* const mf) -> bool {
-  const auto value = ReadMetaEvent(*mf);
-  if (value) {
-    *event = *value;
-  }
-
-  return value.has_value();
 }
 
 auto ReadEvent(unsigned int& last_event_type, midimem_t& mf) -> std::optional<midi_event_t> {
@@ -450,16 +396,6 @@ auto ReadEvent(unsigned int& last_event_type, midimem_t& mf) -> std::optional<mi
   return std::nullopt;
 }
 
-[[deprecated]] auto ReadEvent(midi_event_t* const event, unsigned int* const last_event_type, midimem_t* const mf)
-    -> bool {
-  const auto value = ReadEvent(*last_event_type, *mf);
-  if (value) {
-    *event = *value;
-  }
-
-  return value.has_value();
-}
-
 // Free an event:
 void FreeEvent(midi_event_t& event) {
   // Some event types have dynamically allocated buffers assigned
@@ -480,10 +416,6 @@ void FreeEvent(midi_event_t& event) {
   }
 }
 
-[[deprecated]] void FreeEvent(midi_event_t* const event) {
-  FreeEvent(*event);
-}
-
 // Read and check the track chunk header
 auto ReadTrackHeader(midi_track_t& track, midimem_t& mf) -> bool {
   chunk_header_t chunk_header;
@@ -499,10 +431,6 @@ auto ReadTrackHeader(midi_track_t& track, midimem_t& mf) -> bool {
   track.data_len = ntohl(chunk_header.chunk_size);
 
   return true;
-}
-
-[[deprecated]] auto ReadTrackHeader(midi_track_t* const track, midimem_t* const mf) -> bool {
-  return ReadTrackHeader(*track, *mf);
 }
 
 auto ReadTrack(midimem_t& mf) -> std::optional<midi_track_t> {
@@ -549,15 +477,6 @@ auto ReadTrack(midimem_t& mf) -> std::optional<midi_track_t> {
   return std::make_optional(track);
 }
 
-[[deprecated]] auto ReadTrack(midi_track_t* const track, midimem_t* const mf) -> bool {
-  const auto value = ReadTrack(*mf);
-  if (value) {
-    *track = *value;
-  }
-
-  return value.has_value();
-}
-
 // Free a track:
 void FreeTrack(midi_track_t& track) {
   for (auto& event : track.events) {
@@ -565,10 +484,6 @@ void FreeTrack(midi_track_t& track) {
   }
 
   track.events.clear();
-}
-
-[[deprecated]] void FreeTrack(midi_track_t* const track) {
-  FreeTrack(*track);
 }
 
 auto ReadAllTracks(midi_file_t& file, midimem_t& mf) -> bool {
@@ -583,10 +498,6 @@ auto ReadAllTracks(midi_file_t& file, midimem_t& mf) -> bool {
   }
 
   return true;
-}
-
-[[deprecated]] auto ReadAllTracks(midi_file_t* const file, midimem_t* const mf) -> bool {
-  return ReadAllTracks(*file, *mf);
 }
 
 // Read and check the header chunk.
