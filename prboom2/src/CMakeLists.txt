@@ -173,6 +173,7 @@ set(COMMON_SRC
     z_bmalloc.c
     z_bmalloc.h
     z_zone.c
+    z_zone.cpp
     z_zone.h
 )
 

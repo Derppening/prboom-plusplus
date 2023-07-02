@@ -49,6 +49,7 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -57,8 +58,8 @@
 // ZONE MEMORY
 // PU - purge tags.
 
-enum {PU_FREE, PU_STATIC, PU_SOUND, PU_MUSIC, PU_LEVEL, PU_LEVSPEC, PU_CACHE,
-      /* Must always be last -- killough */ PU_MAX};
+typedef enum {PU_FREE, PU_STATIC, PU_SOUND, PU_MUSIC, PU_LEVEL, PU_LEVSPEC, PU_CACHE,
+      /* Must always be last -- killough */ PU_MAX} purge_tag_t;
 
 #define PU_PURGELEVEL PU_CACHE        /* First purgable tag's level */
 
@@ -140,6 +141,128 @@ void Z_ZoneHistory(char *);
 
 #ifdef __cplusplus
 }  // extern "C"
+#endif  // __cplusplus
+
+#ifdef __cplusplus
+
+#include <limits>
+#include <memory_resource>
+#include <new>
+
+template<typename T>
+class z_allocator_base {
+ protected:
+  using value_type = T;
+
+  [[nodiscard]] auto allocate(const std::size_t n, const purge_tag_t pu = PU_STATIC, void** const data = nullptr)
+      -> T* {
+    if (n > std::numeric_limits<std::size_t>::max() / sizeof(T)) {
+      throw std::bad_array_new_length{};
+    }
+
+    if (const auto p = static_cast<T*>(Z_Malloc(n * sizeof(T), pu, data))) {
+      return p;
+    }
+
+    throw std::bad_alloc{};
+  }
+
+  void deallocate(T* const p, [[maybe_unused]] const std::size_t n) noexcept { Z_Free(p); }
+};
+
+template<typename T, purge_tag_t PU = PU_STATIC, typename UserT = void>
+class z_allocator : protected z_allocator_base<T> {
+ public:
+  using typename z_allocator_base<T>::value_type;
+
+  template<typename U>
+  struct rebind {
+    using other = z_allocator<U, PU, UserT>;
+  };
+
+  z_allocator() noexcept = default;
+
+  explicit z_allocator(UserT** data) : data{data} {}
+
+  template<typename U, purge_tag_t PU2, typename UserT2 = void>
+  constexpr z_allocator([[maybe_unused]] const z_allocator<U, PU2, UserT2>& other) noexcept {}
+
+  [[nodiscard]] auto allocate(const std::size_t n) -> T* { return z_allocator_base<T>::allocate(n, PU, data); }
+
+  using z_allocator_base<T>::deallocate;
+
+ private:
+  UserT** data{nullptr};
+};
+
+template<typename T, purge_tag_t PU>
+  requires(PU < PU_PURGELEVEL)
+class z_allocator<T, PU, void> : protected z_allocator_base<T> {
+ public:
+  using typename z_allocator_base<T>::value_type;
+
+  template<typename U>
+  struct rebind {
+    using other = z_allocator<U, PU, void>;
+  };
+
+  z_allocator() noexcept = default;
+
+  template<typename U, purge_tag_t PU2, typename UserT2 = void>
+  constexpr z_allocator([[maybe_unused]] const z_allocator<U, PU2, UserT2>& other) noexcept {}
+
+  [[nodiscard]] auto allocate(const std::size_t n) -> T* { return z_allocator_base<T>::allocate(n, PU); }
+
+  using z_allocator_base<T>::deallocate;
+};
+
+template<typename T>
+class z_allocator<T, PU_STATIC, void> : protected z_allocator_base<T> {
+ public:
+  using typename z_allocator_base<T>::value_type;
+
+  template<typename U>
+  struct rebind {
+    using other = z_allocator<U, PU_STATIC, void>;
+  };
+
+  z_allocator() noexcept = default;
+
+  template<typename U, purge_tag_t PU2, typename UserT2 = void>
+  constexpr z_allocator([[maybe_unused]] const z_allocator<U, PU2, UserT2>& other) noexcept {}
+
+  [[nodiscard]] auto allocate(const std::size_t n) -> T* { return z_allocator_base<T>::allocate(n); }
+
+  using z_allocator_base<T>::deallocate;
+};
+
+template<typename T1, typename T2>
+constexpr bool operator==(const z_allocator_base<T1>&, const z_allocator_base<T2>&) noexcept {
+  return true;
+}
+
+template<typename T1, typename T2>
+constexpr bool operator!=(const z_allocator_base<T1>&, const z_allocator_base<T2>&) noexcept {
+  return false;
+}
+
+class z_memory_resource : std::pmr::memory_resource {
+ public:
+  z_memory_resource(const purge_tag_t pu = PU_STATIC, void** const user = nullptr);
+
+  auto do_allocate(const std::size_t bytes, [[maybe_unused]] const std::size_t alignment) noexcept -> void* override;
+
+  void do_deallocate(void* const p,
+                     [[maybe_unused]] const std::size_t bytes,
+                     [[maybe_unused]] const std::size_t alignment) noexcept override;
+
+  [[nodiscard]] auto do_is_equal(const std::pmr::memory_resource& other) const noexcept -> bool override;
+
+ private:
+  purge_tag_t _pu_;
+  void** _user_;
+};
+
 #endif  // __cplusplus
 
 #endif

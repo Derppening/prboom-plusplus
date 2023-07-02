@@ -129,7 +129,7 @@ struct midi_file_s {
   midi_header_t header;
 
   // All tracks in this file:
-  std::vector<midi_track_t> tracks;
+  std::vector<midi_track_t, z_allocator<midi_track_t>> tracks;
 
   // Data buffer used to store data read for SysEx or meta events:
   std::vector<byte> buffer;
@@ -710,7 +710,7 @@ auto MIDI_GenerateFlatList(midi_file_t* const file) -> midi_event_t** {
                                           [](const auto acc, const auto& v) { return acc + v.events.size(); });
 
   auto ret = std::unique_ptr<midi_event_t* [], decltype([](auto* p) { free(p); })> {
-    (midi_event_t**)malloc(totalevents * sizeof(midi_event_t**))
+    static_cast<midi_event_t**>(malloc(totalevents * sizeof(midi_event_t**)))
   };
   midi_event_t** epos = ret.get();
 

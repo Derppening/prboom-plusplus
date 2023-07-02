@@ -874,7 +874,7 @@ std::list<opl_voice_t*> voice_free_list;
 std::list<opl_voice_t*> voice_alloced_list;
 
 // Track data for playing tracks:
-std::vector<opl_track_data_t> tracks;
+std::vector<opl_track_data_t, z_allocator<opl_track_data_t>> tracks;
 std::size_t running_tracks = 0;
 bool song_looping;
 }  // namespace
