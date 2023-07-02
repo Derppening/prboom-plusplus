@@ -241,9 +241,8 @@ auto ReadByteSequence(const std::size_t num_bytes, midimem_t& mf) -> OutT {
 // Read a MIDI channel event.
 // two_param indicates that the event type takes two parameters
 // (three byte) otherwise it is single parameter (two byte)
-auto ReadChannelEvent(const byte event_type, const bool two_param, midimem_t& mf) -> std::optional<midi_event_t> {
-  midi_event_t event;
-
+auto ReadChannelEvent(midi_event_t event, const byte event_type, const bool two_param, midimem_t& mf)
+    -> std::optional<midi_event_t> {
   // Set basics:
   event.event_type = static_cast<midi_event_type_t>(event_type & 0xf0);
   event.data.channel.channel = event_type & 0x0f;
@@ -274,8 +273,7 @@ auto ReadChannelEvent(const byte event_type, const bool two_param, midimem_t& mf
 }
 
 // Read sysex event:
-auto ReadSysExEvent(const int event_type, midimem_t& mf) -> std::optional<midi_event_t> {
-  midi_event_t event;
+auto ReadSysExEvent(midi_event_t event, const int event_type, midimem_t& mf) -> std::optional<midi_event_t> {
   event.event_type = static_cast<midi_event_type_t>(event_type);
 
   const auto len = ReadVariableLength(mf);
@@ -298,8 +296,7 @@ auto ReadSysExEvent(const int event_type, midimem_t& mf) -> std::optional<midi_e
 }
 
 // Read meta event:
-auto ReadMetaEvent(midimem_t& mf) -> std::optional<midi_event_t> {
-  midi_event_t event;
+auto ReadMetaEvent(midi_event_t event, midimem_t& mf) -> std::optional<midi_event_t> {
   event.event_type = MIDI_EVENT_META;
 
   // R.meta event type:
@@ -352,7 +349,6 @@ auto ReadEvent(unsigned int& last_event_type, midimem_t& mf) -> std::optional<mi
   // the top bit is not set, it is because we are using the "same
   // as previous event type" shortcut to save a byte.  Skip back
   // a byte so that we read this byte again.
-
   if ((*event_type & 0x80) == 0) {
     event_type = std::make_optional(static_cast<byte>(last_event_type));
     mf.pos--;
@@ -368,12 +364,12 @@ auto ReadEvent(unsigned int& last_event_type, midimem_t& mf) -> std::optional<mi
     case MIDI_EVENT_AFTERTOUCH:
     case MIDI_EVENT_CONTROLLER:
     case MIDI_EVENT_PITCH_BEND:
-      return ReadChannelEvent(*event_type, true, mf);
+      return ReadChannelEvent(event, *event_type, true, mf);
 
     // Single parameter channel events:
     case MIDI_EVENT_PROGRAM_CHANGE:
     case MIDI_EVENT_CHAN_AFTERTOUCH:
-      return ReadChannelEvent(*event_type, false, mf);
+      return ReadChannelEvent(event, *event_type, false, mf);
 
     default:
       break;
@@ -383,10 +379,10 @@ auto ReadEvent(unsigned int& last_event_type, midimem_t& mf) -> std::optional<mi
   switch (*event_type) {
     case MIDI_EVENT_SYSEX:
     case MIDI_EVENT_SYSEX_SPLIT:
-      return ReadSysExEvent(*event_type, mf);
+      return ReadSysExEvent(event, *event_type, mf);
 
     case MIDI_EVENT_META:
-      return ReadMetaEvent(mf);
+      return ReadMetaEvent(event, mf);
 
     default:
       break;
