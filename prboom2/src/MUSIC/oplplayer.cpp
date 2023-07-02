@@ -890,9 +890,7 @@ auto LoadInstrumentTable() -> bool {
   const auto* lump = static_cast<const byte*>(W_CacheLumpName("GENMIDI"));
 
   // Check header
-
-  //  if (strncmp((const char*)lump, GENMIDI_HEADER.data(), GENMIDI_HEADER.length()) != 0) {
-  if (std::string_view{reinterpret_cast<const char*>(lump), GENMIDI_HEADER.length()} == GENMIDI_HEADER.data()) {
+  if (std::string_view{reinterpret_cast<const char*>(lump), GENMIDI_HEADER.length()} != GENMIDI_HEADER.data()) {
     W_UnlockLumpName("GENMIDI");
 
     return false;
