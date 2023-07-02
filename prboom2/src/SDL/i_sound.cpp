@@ -1389,10 +1389,8 @@ auto Exp_RegisterSongEx(const void* data, size_t len, int try_mus2mid) -> int {
     // Let's try to load this song directly
 
     // go through music players in order
-    bool found = false;
-
     for (std::size_t j = 0; j < music_players.size(); j++) {
-      found = false;
+      bool found = false;
       for (std::size_t i = 0; i < music_players.size(); i++) {
         if (std::string_view{music_players[i]->name()} == std::string_view{music_player_order[j]}) {
           found = true;
