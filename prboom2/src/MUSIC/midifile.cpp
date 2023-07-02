@@ -528,25 +528,27 @@ auto ReadFileHeader(midi_file_t& file, midimem_t& mf) -> bool {
 
   return true;
 }
-
-auto ReadFileHeader(midi_file_t* file, midimem_t* mf) -> bool {
-  return ReadFileHeader(*file, *mf);
-}
 }  // namespace
 
 void MIDI_FreeFile(midi_file_t* const file) {
   file->tracks.clear();
 
+  file->~midi_file_t();
   free(file);
 }
 
 auto MIDI_LoadFile(midimem_t* const mf) -> midi_file_t* {
-  std::unique_ptr<midi_file_t, decltype([](auto* p) { MIDI_FreeFile(p); })> file{
-      static_cast<midi_file_t*>(malloc(sizeof(midi_file_t)))};
+  std::unique_ptr<midi_file_t, decltype([](auto* p) {
+                    MIDI_FreeFile(p);
+                    free(p);
+                  })>
+      file{static_cast<midi_file_t*>(malloc(sizeof(midi_file_t)))};
 
   if (!file) {
     return nullptr;
   }
+
+  new (file.get()) midi_file_t{};
 
   file->tracks.clear();
   file->buffer.clear();
@@ -558,7 +560,6 @@ auto MIDI_LoadFile(midimem_t* const mf) -> midi_file_t* {
   }
 
   // Read all tracks:
-
   if (!ReadAllTracks(*file, *mf)) {
     file.reset();
     return nullptr;
