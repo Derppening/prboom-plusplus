@@ -9,7 +9,7 @@ endfunction()
 # PrBoom main executable
 
 set(COMMON_SRC
-    am_map.c
+    am_map.cpp
     am_map.h
     doomdata.h
     doomdef.c

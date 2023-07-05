@@ -40,6 +40,10 @@
 #endif
 
 #ifdef __cplusplus
+#include <algorithm>
+#endif  // __cplusplus
+
+#ifdef __cplusplus
 extern "C" {
 #endif  // __cplusplus
 
@@ -59,13 +63,25 @@ typedef unsigned char byte;
 
 //e6y
 #ifndef MAX
+#ifdef __cplusplus
+#define MAX(a,b) (std::max(a, b))
+#else
 #define MAX(a,b) ((a)>(b)?(a):(b))
+#endif  // __cplusplus
 #endif
 #ifndef MIN
+#ifdef __cplusplus
+#define MIN(a,b) (std::min(a, b))
+#else
 #define MIN(a,b) ((a)<(b)?(a):(b))
+#endif  // __cplusplus
 #endif
 #ifndef BETWEEN
+#ifdef __cplusplus
+#define BETWEEN(l,u,x) (std::clamp(l, u, x))
+#else
 #define BETWEEN(l,u,x) ((l)>(x)?(l):(x)>(u)?(u):(x))
+#endif  // __cplusplus
 #endif
 
 #include <stdint.h>
