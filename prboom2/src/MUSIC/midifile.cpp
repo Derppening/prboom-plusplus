@@ -117,7 +117,18 @@ struct midi_track_t {
   unsigned int data_len;
 
   // Events in this track:
-  std::vector<midi_event_t> events;
+  std::vector<midi_event_t, z_allocator<midi_event_t>> events;
+
+  static auto operator new(const std::size_t count) -> void* {
+    auto* ptr = malloc(count);
+    ptr = ::operator new(count, ptr);
+    return ptr;
+  }
+
+  static void operator delete(void* const ptr, [[maybe_unused]] const std::size_t sz) {
+    ::operator delete(ptr, ptr);
+    free(ptr);
+  }
 };
 
 struct midi_track_iter_s {
@@ -133,6 +144,17 @@ struct midi_file_s {
 
   // Data buffer used to store data read for SysEx or meta events:
   std::vector<byte> buffer;
+
+  static auto operator new(const std::size_t count) -> void* {
+    auto* ptr = malloc(count);
+    ptr = ::operator new(count, ptr);
+    return ptr;
+  }
+
+  static void operator delete(void* const ptr, [[maybe_unused]] const std::size_t sz) {
+    ::operator delete(ptr, ptr);
+    free(ptr);
+  }
 };
 
 namespace {
@@ -529,22 +551,15 @@ auto ReadFileHeader(midi_file_t& file, midimem_t& mf) -> bool {
 void MIDI_FreeFile(midi_file_t* const file) {
   file->tracks.clear();
 
-  file->~midi_file_t();
-  free(file);
+  delete file;
 }
 
 auto MIDI_LoadFile(midimem_t* const mf) -> midi_file_t* {
-  std::unique_ptr<midi_file_t, decltype([](auto* p) {
-                    MIDI_FreeFile(p);
-                    free(p);
-                  })>
-      file{static_cast<midi_file_t*>(malloc(sizeof(midi_file_t)))};
+  std::unique_ptr<midi_file_t, decltype([](auto* p) { MIDI_FreeFile(p); })> file{new midi_file_t{}};
 
   if (!file) {
     return nullptr;
   }
-
-  new (file.get()) midi_file_t{};
 
   file->tracks.clear();
   file->buffer.clear();
@@ -582,7 +597,7 @@ auto MIDI_IterateTrack(const midi_file_t* const file, const unsigned int track) 
   return iter;
 }
 
-void MIDI_FreeIterator(midi_track_iter_t* iter) {
+void MIDI_FreeIterator(midi_track_iter_t* const iter) {
   free(iter);
 }
 
@@ -855,8 +870,8 @@ auto MIDI_spmc(const midi_file_t* const file, const midi_event_t* const ev, cons
   if (ev != nullptr) {
     if (ev->event_type == MIDI_EVENT_META) {
       if (ev->data.meta.length == 3) {
-        tempo = (unsigned)ev->data.meta.data[0] << 16 | (unsigned)ev->data.meta.data[1] << 8
-                | (unsigned)ev->data.meta.data[2];
+        tempo = static_cast<unsigned>(ev->data.meta.data[0]) << 16 | static_cast<unsigned>(ev->data.meta.data[1]) << 8
+                | static_cast<unsigned>(ev->data.meta.data[2]);
       } else {
         lprintf(LO_WARN, "MIDI_spmc: wrong length tempo meta message in midi file\n");
       }
@@ -889,8 +904,7 @@ auto MIDI_LoadFileSpecial(midimem_t* const mf) -> midi_file_t* {
     return nullptr;
   }
 
-  auto ret =
-      std::unique_ptr<midi_file_t, decltype([](auto* p) { free(p); })>{(midi_file_t*)malloc(sizeof(midi_file_t))};
+  auto ret = std::unique_ptr<midi_file_t, decltype([](auto* p) { MIDI_FreeFile(p); })>{new midi_file_t{}};
 
   ret->header.format_type = 0;
   ret->header.num_tracks = 1;
