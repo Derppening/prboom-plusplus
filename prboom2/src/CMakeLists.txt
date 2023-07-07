@@ -178,7 +178,7 @@ set(COMMON_SRC
 )
 
 set(NET_CLIENT_SRC
-    d_client.c
+    d_client.cpp
 )
 
 if(HAVE_MMAP OR HAVE_CREATE_FILE_MAPPING)
