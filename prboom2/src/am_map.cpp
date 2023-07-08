@@ -755,6 +755,7 @@ void AM_maxOutWindowScale() {
 }
 }  // namespace
 
+namespace {
 //
 // AM_Responder()
 //
@@ -762,20 +763,20 @@ void AM_maxOutWindowScale() {
 //
 // Passed an input event, returns true if its handled
 //
-auto AM_Responder(event_t* const ev) -> dboolean {
+auto AM_Responder(event_t& ev) -> bool {
   static bool bigstate = false;
 
   bool rc = false;
 
   if ((automapmode & am_active) == 0) {
-    if (ev->type == ev_keydown && ev->data1 == key_map)  // phares
+    if (ev.type == ev_keydown && ev.data1 == key_map)  // phares
     {
       AM_Start();
       rc = true;
     }
-  } else if (ev->type == ev_keydown) {
+  } else if (ev.type == ev_keydown) {
     rc = true;
-    const int ch = ev->data1;                // phares
+    const int ch = ev.data1;                 // phares
     if (ch == key_map_right) {               //    |
       if ((automapmode & am_follow) == 0) {  //    V
         m_paninc.x = FTOM(F_PANINC());
@@ -857,9 +858,9 @@ auto AM_Responder(event_t* const ev) -> dboolean {
     {
       rc = false;
     }
-  } else if (ev->type == ev_keyup) {
+  } else if (ev.type == ev_keyup) {
     rc = false;
-    const int ch = ev->data1;
+    const int ch = ev.data1;
     if (ch == key_map_right) {
       if ((automapmode & am_follow) == 0) {
         m_paninc.x = 0;
@@ -884,6 +885,11 @@ auto AM_Responder(event_t* const ev) -> dboolean {
   }
 
   return static_cast<dboolean>(rc);
+}
+}  // namespace
+
+auto AM_Responder(event_t* const ev) -> dboolean {
+  return AM_Responder(*ev);
 }
 
 namespace {

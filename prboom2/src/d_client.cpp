@@ -241,14 +241,13 @@ void D_CheckNetGame() {
   }
 }
 
-auto D_NetGetWad([[maybe_unused]] const char* const name) -> dboolean {
+auto D_NetGetWad(const std::string_view name) -> bool {
 #if defined(HAVE_SYS_WAIT_H)
-  const auto name_sv = std::string_view{name};
-  const std::size_t psize = sizeof(packet_header_t) + name_sv.length() + 500;
+  const std::size_t psize = sizeof(packet_header_t) + name.length() + 500;
   unique_packet_header_t packet;
   bool done = false;
 
-  if (!server || name_sv.find_first_of('/') != std::string_view::npos) {
+  if (!server || name.find_first_of('/') != std::string_view::npos) {
     return false;  // If it contains path info, reject
   }
 
@@ -257,15 +256,15 @@ auto D_NetGetWad([[maybe_unused]] const char* const name) -> dboolean {
     packet = unique_packet_header_t{static_cast<packet_header_t*>(Z_Malloc(psize, PU_STATIC, nullptr))};
     packet_set(packet.get(), PKT_WAD, 0);
     *reinterpret_cast<byte*>(packet.get() + 1) = consoleplayer;
-    std::copy(name_sv.cbegin(), name_sv.cend(), reinterpret_cast<char*>(1 + reinterpret_cast<byte*>(packet.get() + 1)));
-    I_SendPacket(packet.get(), sizeof(packet_header_t) + name_sv.length() + 2);
+    std::copy(name.cbegin(), name.cend(), reinterpret_cast<char*>(1 + reinterpret_cast<byte*>(packet.get() + 1)));
+    I_SendPacket(packet.get(), sizeof(packet_header_t) + name.length() + 2);
 
     I_uSleep(10000);
   } while (!I_GetPacket(packet.get(), psize) || (packet->type != PKT_WAD));
   packet.reset();
 
-  if (!strcasecmp(reinterpret_cast<char*>(packet.get() + 1), name_sv.data())) {
-    byte* p = reinterpret_cast<byte*>(packet.get() + 1) + name_sv.length() + 1;
+  if (!strcasecmp(reinterpret_cast<char*>(packet.get() + 1), name.data())) {
+    byte* p = reinterpret_cast<byte*>(packet.get() + 1) + name.length() + 1;
 
     /* Automatic wad file retrieval using wget (supports http and ftp, using URLs)
      * Unix systems have all these commands handy, this kind of thing is easy
@@ -284,7 +283,7 @@ auto D_NetGetWad([[maybe_unused]] const char* const name) -> dboolean {
     /* This is the parent, i.e. main LxDoom process */
     int rv;
     wait(&rv);
-    if (!(done = (M_access(name, R_OK) == 0))) {
+    if (!(done = (M_access(name.data(), R_OK) == 0))) {
       if (std::string_view{reinterpret_cast<char*>(p)}.ends_with(".zip")) {
         p += (std::string_view{reinterpret_cast<char*>(p)}.find_last_of('/') + 1);
 
@@ -292,12 +291,12 @@ auto D_NetGetWad([[maybe_unused]] const char* const name) -> dboolean {
           perror("fork");
         } else if (pid == 0) {
           /* Child executes decompressor */
-          execlp("unzip", "unzip", p, name, nullptr);
+          execlp("unzip", "unzip", p, name.data(), nullptr);
         }
 
         /* Parent waits for the file */
         wait(&rv);
-        done = M_access(name, R_OK) != 0;
+        done = M_access(name.data(), R_OK) != 0;
       }
 
       /* Add more decompression protocols here as desired */
@@ -309,6 +308,10 @@ auto D_NetGetWad([[maybe_unused]] const char* const name) -> dboolean {
 #else /* HAVE_SYS_WAIT_H */
   return false;
 #endif
+}
+
+auto D_NetGetWad(const char* const name) -> dboolean {
+  return D_NetGetWad(std::string_view{name});
 }
 
 void NetUpdate() {
