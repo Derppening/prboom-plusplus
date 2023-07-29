@@ -62,7 +62,7 @@ set(COMMON_SRC
     i_sound.h
     i_system.h
     i_video.h
-    lprintf.c
+    lprintf.cpp
     lprintf.h
     md5.c
     md5.h
