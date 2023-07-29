@@ -299,7 +299,7 @@ int endoom_mode;
 namespace {
 void PrintVer() {
   char vbuf[200];
-  lprintf(LO_INFO, "%s\n", I_GetVersionString(vbuf, 200));
+  lprint(LO_INFO, "{}\n", I_GetVersionString(vbuf, 200));
 }
 
 //
@@ -502,9 +502,9 @@ void I_SetAffinityMask() {
 #endif
 
     if (errbuf == nullptr) {
-      lprintf(LO_INFO, "I_SetAffinityMask: manual affinity mask is %d\n", process_affinity_mask);
+      lprint(LO_INFO, "I_SetAffinityMask: manual affinity mask is {}\n", process_affinity_mask);
     } else {
-      lprintf(LO_ERROR, "I_SetAffinityMask: failed to set process affinity mask (%s)\n", errbuf);
+      lprint(LO_ERROR, "I_SetAffinityMask: failed to set process affinity mask ({})\n", errbuf);
     }
   }
 }
@@ -536,9 +536,9 @@ void I_SetProcessPriority() {
 #endif
 
     if (errbuf == NULL) {
-      lprintf(LO_INFO, "I_SetProcessPriority: priority for the process is %d\n", process_priority);
+      lprint(LO_INFO, "I_SetProcessPriority: priority for the process is {}\n", process_priority);
     } else {
-      lprintf(LO_ERROR, "I_SetProcessPriority: failed to set priority for the process (%s)\n", errbuf);
+      lprint(LO_ERROR, "I_SetProcessPriority: failed to set priority for the process ({})\n", errbuf);
     }
   }
 }
@@ -568,7 +568,7 @@ auto main(int argc, char** argv) -> int {
   // e6y: was moved from D_DoomMainSetup
   // init subsystems
   // jff 9/3/98 use logical output routine
-  lprintf(LO_INFO, "M_LoadDefaults: Load system defaults.\n");
+  lprint(LO_INFO, "M_LoadDefaults: Load system defaults.\n");
   M_LoadDefaults();  // load before initing other systems
 
   /* Version info */

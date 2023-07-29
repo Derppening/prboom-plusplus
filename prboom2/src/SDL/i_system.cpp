@@ -538,7 +538,7 @@ auto I_FindFileInternal(const std::optional<std::string_view> wfname,
 
     if (M_access(p, F_OK) == 0) {
       if (!isStatic) {
-        lprintf(LO_INFO, " found %s\n", p);
+        lprint(LO_INFO, " found {}\n", p);
       }
 
       return p;

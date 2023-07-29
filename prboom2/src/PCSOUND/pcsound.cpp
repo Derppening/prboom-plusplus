@@ -74,7 +74,7 @@ auto PCSound_Init(pcsound_callback_func callback_func) -> int {
         if (driver->init_func(callback_func) != 0) {
           pcsound_driver = driver;
         } else {
-          lprintf(LO_WARN, "Failed to initialise PC sound driver: %s\n", driver->name);
+          lprint(LO_WARN, "Failed to initialise PC sound driver: {}\n", driver->name);
           break;
         }
       }
@@ -91,10 +91,10 @@ auto PCSound_Init(pcsound_callback_func callback_func) -> int {
   }
 
   if (pcsound_driver != nullptr) {
-    lprintf(LO_INFO, "Using PC sound driver: %s\n", pcsound_driver->name);
+    lprint(LO_INFO, "Using PC sound driver: {}\n", pcsound_driver->name);
     return 1;
   } else {
-    lprintf(LO_WARN, "Failed to find a working PC sound driver.\n");
+    lprint(LO_WARN, "Failed to find a working PC sound driver.\n");
     return 0;
   }
 }

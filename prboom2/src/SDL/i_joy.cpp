@@ -61,8 +61,8 @@ SDL_Joystick* joystick;
 #endif
 
 namespace {
-static void I_EndJoystick() {
-  lprintf(LO_DEBUG, "I_EndJoystick : closing joystick\n");
+void I_EndJoystick() {
+  lprint(LO_DEBUG, "I_EndJoystick : closing joystick\n");
 }
 }  // namespace
 
@@ -101,7 +101,7 @@ void I_PollJoystick(void) {
 
 void I_InitJoystick() {
 #ifdef HAVE_SDL_JOYSTICKGETAXIS
-  const char* fname = "I_InitJoystick : ";
+  const std::string_view fname = "I_InitJoystick : ";
 
   if (usejoystick == 0) {
     return;
@@ -110,11 +110,11 @@ void I_InitJoystick() {
   SDL_InitSubSystem(SDL_INIT_JOYSTICK);
   const int num_joysticks = SDL_NumJoysticks();
 
-  if (M_CheckParm("-nojoy") || (usejoystick > num_joysticks) || (usejoystick < 0)) {
+  if (M_CheckParm("-nojoy") != 0 || (usejoystick > num_joysticks) || (usejoystick < 0)) {
     if ((usejoystick > num_joysticks) || (usejoystick < 0)) {
-      lprintf(LO_WARN, "%sinvalid joystick %d\n", fname, usejoystick);
+      lprint(LO_WARN, "{}invalid joystick {}\n", fname, usejoystick);
     } else {
-      lprintf(LO_INFO, "%suser disabled\n", fname);
+      lprint(LO_INFO, "{}user disabled\n", fname);
     }
 
     return;
@@ -122,10 +122,10 @@ void I_InitJoystick() {
 
   joystick = SDL_JoystickOpen(usejoystick - 1);
   if (joystick == nullptr) {
-    lprintf(LO_ERROR, "%serror opening joystick %d\n", fname, usejoystick);
+    lprint(LO_ERROR, "{}error opening joystick {}\n", fname, usejoystick);
   } else {
     I_AtExit(I_EndJoystick, true);
-    lprintf(LO_INFO, "%sopened %s\n", fname, SDL_JoystickName(joystick));
+    lprint(LO_INFO, "{}opened {}\n", fname, SDL_JoystickName(joystick));
     joyup = 32767;
     joydown = -32768;
     joyright = 32767;

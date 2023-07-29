@@ -620,12 +620,12 @@ void I_UpdateSound(void* const unused, Uint8* const stream, const int len) {
 
 void I_ShutdownSound() {
   if (sound_inited) {
-    lprintf(LO_INFO, "I_ShutdownSound: ");
+    lprint(LO_INFO, "I_ShutdownSound: ");
 #ifdef HAVE_MIXER
     Mix_CloseAudio();
 #endif
     SDL_CloseAudio();
-    lprintf(LO_INFO, "\n");
+    lprint(LO_INFO, "\n");
     sound_inited = false;
 
     if (sfxmutex != nullptr) {
@@ -640,7 +640,7 @@ void I_ShutdownSound() {
 void I_InitSound() {
   // haleyjd: the docs say we should do this
   if (SDL_InitSubSystem(SDL_INIT_AUDIO) != 0) {
-    lprintf(LO_INFO, "Couldn't initialize SDL audio (%s))\n", SDL_GetError());
+    lprint(LO_INFO, "Couldn't initialize SDL audio ({}))\n", SDL_GetError());
     nosfxparm = true;
     nomusicparm = true;
     return;
@@ -651,7 +651,7 @@ void I_InitSound() {
   }
 
   // Secure and configure sound device first.
-  lprintf(LO_INFO, "I_InitSound: ");
+  lprint(LO_INFO, "I_InitSound: ");
 
   if (use_experimental_music == 0) {
 #ifdef HAVE_MIXER
@@ -664,7 +664,7 @@ void I_InitSound() {
     if (Mix_OpenAudioDevice(audio_rate, MIX_DEFAULT_FORMAT, audio_channels, audio_buffers, nullptr,
                             SDL_AUDIO_ALLOW_FREQUENCY_CHANGE)
         < 0) {
-      lprintf(LO_INFO, "couldn't open audio with desired format (%s)\n", SDL_GetError());
+      lprint(LO_INFO, "couldn't open audio with desired format ({})\n", SDL_GetError());
       nosfxparm = true;
       nomusicparm = true;
       return;
@@ -674,7 +674,7 @@ void I_InitSound() {
     sound_inited_once = true;  // e6y
     sound_inited = true;
     Mix_SetPostMix(I_UpdateSound, nullptr);
-    lprintf(LO_INFO, " configured audio device with %d samples/slice\n", audio_buffers);
+    lprint(LO_INFO, " configured audio device with {} samples/slice\n", audio_buffers);
   } else
 #else   // HAVE_MIXER
   }
@@ -694,7 +694,7 @@ void I_InitSound() {
     audio.callback = I_UpdateSound;
 
     if (SDL_OpenAudio(&audio, nullptr) < 0) {
-      lprintf(LO_INFO, "couldn't open audio with desired format (%s))\n", SDL_GetError());
+      lprint(LO_INFO, "couldn't open audio with desired format ({}))\n", SDL_GetError());
       nosfxparm = true;
       nomusicparm = true;
       return;
@@ -702,7 +702,7 @@ void I_InitSound() {
 
     sound_inited_once = true;  // e6y
     sound_inited = true;
-    lprintf(LO_INFO, " configured audio device with %d samples/slice\n", audio.samples);
+    lprint(LO_INFO, " configured audio device with {} samples/slice\n", audio.samples);
   }
   if (first_sound_init) {
     I_AtExit(I_ShutdownSound, true);
@@ -721,7 +721,7 @@ void I_InitSound() {
   }
 
   // Finished initialization.
-  lprintf(LO_INFO, "I_InitSound: sound module ready\n");
+  lprint(LO_INFO, "I_InitSound: sound module ready\n");
   SDL_PauseAudio(0);
 }
 
@@ -849,7 +849,7 @@ void I_ShutdownMusic() {
     for (const auto& ext : music_tmp_ext) {
       std::string name = std::format("{}{}", music_tmp, ext);
       if (unlink(name.data()) == 0) {
-        lprintf(LO_DEBUG, "I_ShutdownMusic: removed %s\n", name.data());
+        lprint(LO_DEBUG, "I_ShutdownMusic: removed {}\n", name);
       }
     }
     free(music_tmp);
@@ -871,7 +871,7 @@ void I_InitMusic() {
     {
       const int fd = mkstemp(music_tmp);
       if (fd < 0) {
-        lprintf(LO_ERROR, "I_InitMusic: failed to create music temp file %s", music_tmp);
+        lprint(LO_ERROR, "I_InitMusic: failed to create music temp file {}", music_tmp);
         free(music_tmp);
         music_tmp = nullptr;
         return;
@@ -886,7 +886,7 @@ void I_InitMusic() {
   }
   return;
 #endif
-  lprintf(LO_INFO, "I_InitMusic: Was compiled without SDL_Mixer support.  You should enable experimental music.\n");
+  lprint(LO_INFO, "I_InitMusic: Was compiled without SDL_Mixer support.  You should enable experimental music.\n");
 }
 
 void I_PlaySong(const int handle, const int looping) {
@@ -1117,9 +1117,9 @@ auto I_RegisterSong(const void* const data, const std::size_t len) -> int {
     }
 
     if (io_errors) {
-      lprintf(LO_ERROR, "Error writing song\n");
+      lprint(LO_ERROR, "Error writing song\n");
     } else {
-      lprintf(LO_ERROR, "Error loading song: %s\n", Mix_GetError());
+      lprint(LO_ERROR, "Error loading song: {}\n", Mix_GetError());
     }
   }
 
@@ -1146,7 +1146,7 @@ auto I_RegisterMusic(const char* filename, musicinfo_t* const song) -> int {
 
   music[0] = Mix_LoadMUS(filename);
   if (music[0] == nullptr) {
-    lprintf(LO_WARN, "Couldn't load music from %s: %s\nAttempting to load default MIDI music.\n", filename,
+    lprint(LO_WARN, "Couldn't load music from {}: {}\nAttempting to load default MIDI music.\n", filename,
             Mix_GetError());
     return 1;
   }
@@ -1402,19 +1402,19 @@ auto Exp_RegisterSongEx(const void* data, size_t len, int try_mus2mid) -> int {
               current_player = i;
               music_handle = temp_handle;
               SDL_UnlockMutex(musmutex);
-              lprintf(LO_INFO, "Exp_RegisterSongEx: Using player %s\n", music_players[i]->name());
+              lprint(LO_INFO, "Exp_RegisterSongEx: Using player {}\n", music_players[i]->name());
               return 1;
             }
           } else {
-            lprintf(LO_INFO, "Exp_RegisterSongEx: Music player %s on preferred list but it failed to init\n",
+            lprint(LO_INFO, "Exp_RegisterSongEx: Music player {} on preferred list but it failed to init\n",
                     music_players[i]->name());
           }
         }
       }
 
       if (!found) {
-        lprintf(LO_INFO,
-                "Exp_RegisterSongEx: Couldn't find preferred music player %s in list\n  (typo or support not included "
+        lprint(LO_INFO,
+                "Exp_RegisterSongEx: Couldn't find preferred music player {} in list\n  (typo or support not included "
                 "at compile time)\n",
                 music_player_order[j]);
       }
@@ -1474,7 +1474,7 @@ auto Exp_RegisterSongEx(const void* data, size_t len, int try_mus2mid) -> int {
     }
   }
 
-  lprintf(LO_ERROR, "Exp_RegisterSongEx: Failed\n");
+  lprint(LO_ERROR, "Exp_RegisterSongEx: Failed\n");
   return 0;
 }
 
@@ -1489,14 +1489,14 @@ auto Exp_RegisterMusic(const char* const filename, musicinfo_t* const song) -> i
   int len = M_ReadFile(filename, reinterpret_cast<byte**>(&song_data));
 
   if (len == -1) {
-    lprintf(LO_WARN, "Couldn't read %s\nAttempting to load default MIDI music.\n", filename);
+    lprint(LO_WARN, "Couldn't read {}\nAttempting to load default MIDI music.\n", filename);
     return 1;
   }
 
   if (Exp_RegisterSongEx(song_data, len, 1) == 0) {
     free(song_data);
     song_data = nullptr;
-    lprintf(LO_WARN, "Couldn't load music from %s\nAttempting to load default MIDI music.\n", filename);
+    lprint(LO_WARN, "Couldn't load music from {}\nAttempting to load default MIDI music.\n", filename);
     return 1;  // failure
   }
 
