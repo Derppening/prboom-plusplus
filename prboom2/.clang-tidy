@@ -1,4 +1,4 @@
-Checks:          '*,-abseil-*,-android-*,-boost-*,-cert-*,-fuchsia-*,-llvm-*,-llvmlibc-*,-mpi-*,-objc-*,-openmp-*,-zircon-*'
+Checks:          '*,-abseil-*,-altera-*,-android-*,-boost-*,-cert-*,-concurrency-*,-darwin-*,-fuchsia-*,-linuxkernel-*,-llvm-*,-llvmlibc-*,-mpi-*,-objc-*,-openmp-*,-zircon-*'
 WarningsAsErrors: ''
 HeaderFilterRegex: ''
 AnalyzeTemporaryDtors: false
