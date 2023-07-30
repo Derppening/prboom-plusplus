@@ -191,7 +191,7 @@ auto I_FileToBuffer(const char* const filename, byte** const data, int* const si
 
   byte* buffer = nullptr;
 
-  FILE* hfile = M_fopen(filename, "rb");
+  std::FILE* hfile = M_fopen(filename, "rb");
   if (hfile != nullptr) {
     fseek(hfile, 0, SEEK_END);
     std::size_t filesize = ftell(hfile);

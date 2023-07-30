@@ -276,7 +276,7 @@ void I_SendPacketTo(packet_header_t* packet, const std::size_t len, UDP_CHANNEL*
   SDLNet_UDP_Send(udp_socket, *to, udp_packet.get());
 }
 
-void I_PrintAddress([[maybe_unused]] FILE* fp, [[maybe_unused]] UDP_CHANNEL* addr) {
+void I_PrintAddress([[maybe_unused]] std::FILE* fp, [[maybe_unused]] UDP_CHANNEL* addr) {
   /*
     char *addy;
     Uint16 port;

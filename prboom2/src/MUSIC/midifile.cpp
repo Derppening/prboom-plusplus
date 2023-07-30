@@ -1040,7 +1040,7 @@ int main(int argc, char* argv[]) {
     std::exit(1);
   }
 
-  FILE* const f = M_fopen(argv[1], "rb");
+  std::FILE* const f = M_fopen(argv[1], "rb");
   if (f == nullptr) {
     std::fprintf(stderr, "Failed to open %s\n", argv[1]);
     std::exit(1);
