@@ -93,6 +93,24 @@ template<typename... Args>
 void I_Error_Fmt(std::format_string<Args...> fmt, Args&&... args) {
   I_Error_VFmt(fmt.get(), std::make_format_args(args...));
 }
+
+// Implementation for C++23 std::vprint_*
+auto vprint(std::FILE* stream, std::string_view fmt, std::format_args args) -> int;
+
+inline auto vprint(std::string_view fmt, std::format_args args) -> int {
+  return vprint(stdout, fmt, args);
+}
+
+// Implementation for C++23 std::print
+template<typename... Args>
+auto print(std::FILE* stream, std::format_string<Args...> fmt, Args&&... args) -> int {
+  return vprint(stream, fmt.get(), std::make_format_args(args...));
+}
+
+template<typename... Args>
+auto print(std::format_string<Args...> fmt, Args&&... args) -> int {
+  return print(stdout, fmt, std::forward<Args>(args)...);
+}
 #endif  // __cplusplus
 
 #endif

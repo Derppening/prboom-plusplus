@@ -211,3 +211,9 @@ auto doom_snprintf(char* buf, size_t max, const char* fmt, ...) -> int {
 
   return rv;
 }
+
+auto vprint(std::FILE* const stream, const std::string_view fmt, const std::format_args args) -> int {
+  const auto str = std::vformat(fmt, args);
+
+  return std::fputs(str.c_str(), stream);
+}
