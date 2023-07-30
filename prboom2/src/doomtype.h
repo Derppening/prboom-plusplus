@@ -39,6 +39,10 @@
 #include "config.h"
 #endif
 
+#ifndef __cplusplus
+#include <stdbool.h>
+#endif  // __cplusplus
+
 #ifdef __cplusplus
 #include <algorithm>
 #endif  // __cplusplus
@@ -49,10 +53,6 @@ extern "C" {
 
 #ifndef __BYTEBOOL__
 #define __BYTEBOOL__
-
-#ifndef __cplusplus
-#include <stdbool.h>
-#endif
 
 // TODO(Derppening): Change this to bool when ready - Too many places cast dboolean* into int*, which breaks when using
 //  bool instead of int

@@ -35,6 +35,10 @@
 #ifndef __D_NET__
 #define __D_NET__
 
+#ifndef __cplusplus
+#include <stdbool.h>
+#endif  // __cplusplus
+
 #include "d_player.h"
 #include "doomstat.h"
 
@@ -204,7 +208,7 @@ void D_CheckNetGame(void); // This waits for game start
 void D_NetSendMisc(netmisctype_t type, size_t len, void* data);
 
 // CPhipps - ask server for a wad file we need
-dboolean D_NetGetWad(const char* name);
+bool D_NetGetWad(const char* name);
 
 // Netgame stuff (buffers and pointers, i.e. indices).
 extern  doomcom_t  *doomcom;

@@ -310,7 +310,7 @@ auto D_NetGetWad(const std::string_view name) -> bool {
 #endif
 }
 
-auto D_NetGetWad(const char* const name) -> dboolean {
+auto D_NetGetWad(const char* const name) -> bool {
   return D_NetGetWad(std::string_view{name});
 }
 

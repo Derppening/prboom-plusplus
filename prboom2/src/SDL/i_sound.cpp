@@ -436,7 +436,7 @@ void I_StopSound(const int handle) {
   SDL_UnlockMutex(sfxmutex);
 }
 
-auto I_SoundIsPlaying(const int handle) -> dboolean {
+auto I_SoundIsPlaying(const int handle) -> bool {
 #ifdef RANGECHECK
   if ((handle < 0) || (handle >= MAX_CHANNELS)) {
     I_Error_Fmt("I_SoundIsPlaying: handle out of range");
@@ -450,7 +450,7 @@ auto I_SoundIsPlaying(const int handle) -> dboolean {
   return channelinfo[handle].data != nullptr;
 }
 
-auto I_AnySoundStillPlaying() -> dboolean {
+auto I_AnySoundStillPlaying() -> bool {
   bool result = false;
 
   if (snd_pcspeaker != 0) {

@@ -58,6 +58,7 @@ typedef BOOL(WINAPI* SetAffinityFunc)(HANDLE hProcess, DWORD mask);
 #include <cstring>
 
 #include <algorithm>
+#include <forward_list>
 
 #include "TEXTSCREEN/txt_main.h"
 
@@ -381,25 +382,23 @@ void I_EndDoom() {
 // is due to an error (I_Error)
 // Copyright(C) 2005-2014 Simon Howard
 
-typedef struct atexit_listentry_s atexit_listentry_t;
-
-struct atexit_listentry_s {
+struct atexit_listentry_t {
   atexit_func_t func;
-  dboolean run_on_error;
-  atexit_listentry_t* next;
+  bool run_on_error;
 };
 
 namespace {
-static atexit_listentry_t* exit_funcs = nullptr;
+//atexit_listentry_t* exit_funcs = nullptr;
+std::forward_list<atexit_listentry_t> exit_funcs;
 }  // namespace
 
-void I_AtExit(const atexit_func_t func, const dboolean run_on_error) {
-  auto* const entry = static_cast<atexit_listentry_t*>(malloc(sizeof(atexit_listentry_t)));
+void I_AtExit(const atexit_func_t func, const bool run_on_error) {
+  auto entry = atexit_listentry_t{
+      .func = func,
+      .run_on_error = run_on_error
+  };
 
-  entry->func = func;
-  entry->run_on_error = run_on_error;
-  entry->next = exit_funcs;
-  exit_funcs = entry;
+  exit_funcs.emplace_front(std::move(entry));
 }
 
 /* I_SafeExit
@@ -409,15 +408,10 @@ void I_AtExit(const atexit_func_t func, const dboolean run_on_error) {
  */
 
 void I_SafeExit(const int rc) {
-  atexit_listentry_t* entry;
-
   // Run through all exit functions
-
-  while ((entry = exit_funcs)) {
-    exit_funcs = exit_funcs->next;
-
-    if (rc == 0 || entry->run_on_error) {
-      entry->func();
+  for (const auto& entry : exit_funcs) {
+    if (rc == 0 || entry.run_on_error) {
+      entry.func();
     }
   }
 

@@ -39,6 +39,10 @@
 #ifndef __D_STATE__
 #define __D_STATE__
 
+#ifndef __cplusplus
+#include <stdbool.h>
+#endif  // __cplusplus
+
 // We need the playr data structure as well.
 #include "d_player.h"
 #include "umapinfo.h"
@@ -264,7 +268,7 @@ extern  gamestate_t  gamestate;
 extern  int   gametic;
 
 //e6y
-extern  dboolean realframe;
+extern  bool realframe;
 
 // Bookkeeping on players - state.
 extern  player_t  players[MAXPLAYERS];

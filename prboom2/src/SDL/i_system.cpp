@@ -112,9 +112,9 @@ static bool InDisplay = false;
 static int saved_gametic = -1;
 }  // namespace
 
-dboolean realframe = false;
+bool realframe = false;
 
-auto I_StartDisplay() -> dboolean {
+auto I_StartDisplay() -> bool {
   if (InDisplay) {
     return false;
   }
@@ -186,7 +186,7 @@ auto I_SigString(char* const buf, const std::size_t sz, int signum) -> const cha
 }
 
 #ifndef PRBOOM_SERVER
-auto I_FileToBuffer(const char* const filename, byte** const data, int* const size) -> dboolean {
+auto I_FileToBuffer(const char* const filename, byte** const data, int* const size) -> bool {
   bool result = false;
 
   byte* buffer = nullptr;
@@ -402,7 +402,7 @@ auto HasTrailingSlash(const std::string_view dn) -> bool {
 }
 }  // namespace
 
-auto HasTrailingSlash(const char* dn) -> dboolean {
+auto HasTrailingSlash(const char* dn) -> bool {
   return HasTrailingSlash(std::string_view{dn});
 }
 
@@ -553,18 +553,18 @@ auto I_FindFileInternal(const std::optional<std::string_view> wfname,
 }
 }  // namespace
 
-auto I_FindFileInternal(const char* wfname, const char* ext, dboolean isStatic) -> char* {
+auto I_FindFileInternal(const char* wfname, const char* ext, bool isStatic) -> char* {
   return I_FindFileInternal(wfname != nullptr ? std::make_optional(std::string_view{wfname}) : std::nullopt,
                             ext != nullptr ? std::make_optional(std::string_view{ext}) : std::nullopt,
-                            static_cast<bool>(isStatic));
+                            isStatic);
 }
 
 auto I_FindFile(const char* wfname, const char* ext) -> char* {
-  return I_FindFileInternal(wfname, ext, static_cast<dboolean>(false));
+  return I_FindFileInternal(wfname, ext, false);
 }
 
 auto I_FindFile2(const char* wfname, const char* ext) -> const char* {
-  return I_FindFileInternal(wfname, ext, static_cast<dboolean>(true));
+  return I_FindFileInternal(wfname, ext, true);
 }
 
 #endif
