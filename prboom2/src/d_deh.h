@@ -42,11 +42,13 @@
 #ifndef __D_DEH__
 #define __D_DEH__
 
+#include "doomtype.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif  // __cplusplus
 
-extern int deh_apply_cheats;
+extern dboolean deh_apply_cheats;
 
 void ProcessDehFile(const char *filename, const char *outfilename, int lumpnum);
 

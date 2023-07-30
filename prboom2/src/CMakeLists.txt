@@ -19,7 +19,7 @@ set(COMMON_SRC
     doomtype.h
     dstrings.cpp
     dstrings.h
-    d_deh.c
+    d_deh.cpp
     d_deh.h
     d_englsh.h
     d_event.h

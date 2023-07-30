@@ -32,6 +32,10 @@
  *-----------------------------------------------------------------------------
  */
 
+#ifndef __cplusplus
+#include <stdbool.h>
+#endif  // __cplusplus
+
 #include "doomstat.h"
 #include "m_random.h"
 #include "w_wad.h"
@@ -46,7 +50,7 @@
 #include "hu_stuff.h"
 
 // Ty 03/17/98: flag that new par times have been loaded in d_deh
-extern dboolean deh_pars;
+extern bool deh_pars;
 extern dboolean um_pars;
 
 //
