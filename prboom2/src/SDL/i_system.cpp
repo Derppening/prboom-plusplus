@@ -236,7 +236,7 @@ void I_Read(const int fd, void* const vbuf, std::size_t sz) {
   while (sz != 0) {
     const int rc = read(fd, buf, sz);
     if (rc <= 0) {
-      I_Error("I_Read: read failed: %s", rc != 0 ? std::strerror(errno) : "EOF");
+      I_Error_Fmt("I_Read: read failed: {}", rc != 0 ? std::strerror(errno) : "EOF");
     }
     sz -= rc;
     buf += rc;
@@ -252,7 +252,7 @@ void I_Read(const int fd, void* const vbuf, std::size_t sz) {
 auto I_Filelength(int handle) -> int {
   struct stat fileinfo {};
   if (fstat(handle, &fileinfo) == -1) {
-    I_Error("I_Filelength: %s", strerror(errno));
+    I_Error_Fmt("I_Filelength: {}", strerror(errno));
   }
   return fileinfo.st_size;
 }
@@ -529,7 +529,7 @@ auto I_FindFileInternal(const std::optional<std::string_view> wfname,
         std::strcat(p, ext->data());
       } else {
         if (static_p.capacity() < static_p.size() + ext->length()) {
-          I_Error("Assertion Error: Cannot append ext into static_p without reallocation");
+          I_Error_Fmt("Assertion Error: Cannot append ext into static_p without reallocation");
         }
 
         static_p += *ext;

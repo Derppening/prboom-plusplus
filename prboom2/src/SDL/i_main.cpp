@@ -134,7 +134,7 @@ auto I_GetTime_FastDemo() -> int {
 }
 
 auto I_GetTime_Error() -> int {
-  I_Error("I_GetTime_Error: GetTime() used before initialization");
+  I_Error_Fmt("I_GetTime_Error: GetTime() used before initialization");
   return 0;
 }
 }  // namespace
@@ -219,7 +219,7 @@ void I_SignalHandler(const int s) {
     Z_DumpHistory(buf);
   }
 
-  I_Error("I_SignalHandler: %s", buf);
+  I_Error_Fmt("I_SignalHandler: {}", buf);
 }
 
 //
@@ -240,7 +240,7 @@ void I_ExeptionBegin(ExeptionsList_t exception_index) {
   if (current_exception_index == EXEPTION_NONE) {
     current_exception_index = exception_index;
   } else {
-    I_Error("I_SignalStateSet: signal_state set!");
+    I_Error_Fmt("I_SignalStateSet: signal_state set!");
   }
 }
 
@@ -250,7 +250,7 @@ void I_ExeptionEnd() {
 
 void I_ExeptionProcess() {
   if (current_exception_index > EXEPTION_NONE && current_exception_index < EXEPTION_MAX) {
-    I_Error("%s", ExeptionsParams[current_exception_index].error_message);
+    I_Error_Fmt("{}", ExeptionsParams[current_exception_index].error_message);
   }
 }
 

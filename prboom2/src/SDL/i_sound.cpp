@@ -252,7 +252,7 @@ void updateSoundParams(const int handle, const int volume, int seperation, const
 
 #ifdef RANGECHECK
   if ((handle < 0) || (handle >= MAX_CHANNELS)) {
-    I_Error("I_UpdateSoundParams: handle out of range");
+    I_Error_Fmt("I_UpdateSoundParams: handle out of range");
   }
 #endif
 
@@ -284,11 +284,11 @@ void updateSoundParams(const int handle, const int volume, int seperation, const
 
   // Sanity check, clamp volume.
   if (rightvol < 0 || rightvol > 127) {
-    I_Error("rightvol out of bounds");
+    I_Error_Fmt("rightvol out of bounds");
   }
 
   if (leftvol < 0 || leftvol > 127) {
-    I_Error("leftvol out of bounds");
+    I_Error_Fmt("leftvol out of bounds");
   }
 
   // Get the proper lookup table piece
@@ -378,7 +378,7 @@ auto I_StartSound(const int id, const int channel, const int vol, const int sep,
 
   if ((channel < 0) || (channel >= MAX_CHANNELS)) {
 #ifdef RANGECHECK
-    I_Error("I_StartSound: handle out of range");
+    I_Error_Fmt("I_StartSound: handle out of range");
 #else
     return -1;
 #endif
@@ -422,7 +422,7 @@ auto I_StartSound(const int id, const int channel, const int vol, const int sep,
 void I_StopSound(const int handle) {
 #ifdef RANGECHECK
   if ((handle < 0) || (handle >= MAX_CHANNELS)) {
-    I_Error("I_StopSound: handle out of range");
+    I_Error_Fmt("I_StopSound: handle out of range");
   }
 #endif
 
@@ -439,7 +439,7 @@ void I_StopSound(const int handle) {
 auto I_SoundIsPlaying(const int handle) -> dboolean {
 #ifdef RANGECHECK
   if ((handle < 0) || (handle >= MAX_CHANNELS)) {
-    I_Error("I_SoundIsPlaying: handle out of range");
+    I_Error_Fmt("I_SoundIsPlaying: handle out of range");
   }
 #endif
 
