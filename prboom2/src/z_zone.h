@@ -119,11 +119,19 @@ void Z_DumpHistory(char *);
 #undef calloc
 #undef strdup
 
+#ifdef __cplusplus
+#define malloc(n)          Z_Malloc(n,PU_STATIC,nullptr)
+#define free(p)            Z_Free(p)
+#define realloc(p,n)       Z_Realloc(p,n,PU_STATIC,nullptr)
+#define calloc(n1,n2)      Z_Calloc(n1,n2,PU_STATIC,nullptr)
+#define strdup(s)          Z_Strdup(s,PU_STATIC,nullptr)
+#else
 #define malloc(n)          Z_Malloc(n,PU_STATIC,0)
 #define free(p)            Z_Free(p)
 #define realloc(p,n)       Z_Realloc(p,n,PU_STATIC,0)
 #define calloc(n1,n2)      Z_Calloc(n1,n2,PU_STATIC,0)
 #define strdup(s)          Z_Strdup(s,PU_STATIC,0)
+#endif
 
 #else
 
@@ -182,17 +190,17 @@ class z_allocator : protected z_allocator_base<T> {
 
   z_allocator() noexcept = default;
 
-  explicit z_allocator(UserT** data) : data{data} {}
+  explicit z_allocator(UserT** data) : _data{data} {}
 
   template<typename U, purge_tag_t PU2, typename UserT2 = void>
   constexpr z_allocator([[maybe_unused]] const z_allocator<U, PU2, UserT2>& other) noexcept {}
 
-  [[nodiscard]] auto allocate(const std::size_t n) -> T* { return z_allocator_base<T>::allocate(n, PU, data); }
+  [[nodiscard]] auto allocate(const std::size_t n) -> T* { return z_allocator_base<T>::allocate(n, PU, _data); }
 
   using z_allocator_base<T>::deallocate;
 
  private:
-  UserT** data{nullptr};
+  UserT** _data{nullptr};
 };
 
 template<typename T, purge_tag_t PU>
