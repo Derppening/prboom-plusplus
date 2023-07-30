@@ -31,7 +31,6 @@
  *
  *-----------------------------------------------------------------------------*/
 
-
 #ifndef __D_ITEMS__
 #define __D_ITEMS__
 
@@ -42,19 +41,17 @@ extern "C" {
 #endif  // __cplusplus
 
 /* Weapon info: sprite frames, ammunition use. */
-typedef struct
-{
-  ammotype_t  ammo;
-  int         upstate;
-  int         downstate;
-  int         readystate;
-  int         atkstate;
-  int         flashstate;
-
+typedef struct {
+  ammotype_t ammo;
+  int upstate;
+  int downstate;
+  int readystate;
+  int atkstate;
+  int flashstate;
 } weaponinfo_t;
 
-extern  weaponinfo_t    weaponinfo[NUMWEAPONS+2];
-extern int ammopershot[NUMWEAPONS+2];
+extern weaponinfo_t weaponinfo[NUMWEAPONS + 2];
+extern int ammopershot[NUMWEAPONS + 2];
 
 #ifdef __cplusplus
 }  // extern "C"

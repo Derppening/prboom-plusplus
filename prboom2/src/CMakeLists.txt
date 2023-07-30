@@ -23,7 +23,7 @@ set(COMMON_SRC
     d_deh.h
     d_englsh.h
     d_event.h
-    d_items.c
+    d_items.cpp
     d_items.h
     d_main.c
     d_main.h
