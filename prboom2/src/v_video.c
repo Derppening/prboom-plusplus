@@ -1845,7 +1845,7 @@ void V_ToggleFullscreen(void)
   }
   else
   {
-    desired_fullscreen = (desired_fullscreen ? 0 : 1);
+    desired_fullscreen = !desired_fullscreen;
   }
 
   I_UpdateVideoMode();

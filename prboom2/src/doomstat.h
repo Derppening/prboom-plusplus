@@ -217,7 +217,7 @@ enum menuactive_e {
 extern enum menuactive_e menuactive; // Type of menu overlaid, if any
 
 extern  dboolean paused;        // Game Pause?
-extern  dboolean nodrawers;
+extern  bool nodrawers;
 extern  dboolean noblit;
 
 // This one is related to the 3-screen display mode.
@@ -246,7 +246,7 @@ extern  int leveltime;  // tics in game play for par
 // DEMO playback/recording related stuff.
 
 extern  dboolean usergame;
-extern  dboolean demoplayback;
+extern  bool demoplayback;
 extern  dboolean demorecording;
 extern  int demover;
 

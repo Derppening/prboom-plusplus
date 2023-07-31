@@ -201,7 +201,7 @@ set(SDLDOOM_SOURCES
     SDL/i_sound.cpp
     SDL/i_sshot.cpp
     SDL/i_system.cpp
-    SDL/i_video.c
+    SDL/i_video.cpp
 )
 
 set(PCSOUND_SOURCES

@@ -99,7 +99,7 @@ struct MapEntry *G_LookupMapinfo(int gameepisode, int gamemap);
 
 // e6y
 // It is signature for new savegame format with continuous numbering.
-// Now it is not necessary to add a new level of compatibility in case 
+// Now it is not necessary to add a new level of compatibility in case
 // of need to savegame format change from one minor version to another.
 // The old format is still supported.
 #define NEWFORMATSIG "\xff\xff\xff\xff"
@@ -109,7 +109,7 @@ static dboolean  netdemo;
 static const byte *demobuffer;   /* cph - only used for playback */
 static int demolength; // check for overrun (missing DEMOMARKER)
 static FILE    *demofp; /* cph - record straight to file */
-//e6y static 
+//e6y static
 const byte *demo_p;
 const byte *demo_continue_p = NULL;
 static short    consistancy[MAXPLAYERS][BACKUPTICS];
@@ -129,7 +129,7 @@ static dboolean command_loadgame = false;
 dboolean         usergame;      // ok to save / end game
 dboolean         timingdemo;    // if true, exit with report on completion
 dboolean         fastdemo;      // if true, run at full speed -- killough
-dboolean         nodrawers;     // for comparative timing purposes
+bool             nodrawers;     // for comparative timing purposes
 dboolean         noblit;        // for comparative timing purposes
 int             starttime;     // for comparative timing purposes
 dboolean         deathmatch;    // only if started as net death
@@ -144,7 +144,7 @@ int             basetic;       /* killough 9/29/98: for demo sync */
 int             totalkills, totallive, totalitems, totalsecret;    // for intermission
 int             show_alive;
 dboolean         demorecording;
-dboolean         demoplayback;
+bool             demoplayback;
 dboolean         democontinue = false;
 char             democontinuename[PATH_MAX];
 char*            demo_filename = NULL;
@@ -3027,7 +3027,7 @@ void G_ReadOneTick(ticcmd_t* cmd, const byte **data_p)
     cmd->angleturn = (((signed int)(*(*data_p)++))<<8) + lowbyte;
   }
   cmd->buttons = (unsigned char)(*(*data_p)++);
-  
+
   // e6y: ability to play tasdoom demos directly
   if (compatibility_level == tasdoom_compatibility)
   {
@@ -3114,7 +3114,7 @@ void G_RecordDemo (const char* name)
     free(demo_filename);
     demo_filename = strdup(BaseName(demoname));
   }
-  
+
   // the original name chosen for the demo
   if (!orig_demoname)
   {
@@ -3486,7 +3486,7 @@ void G_BeginRecording (void)
         case prboom_4_compatibility: v = 212; break;
         case prboom_5_compatibility: v = 213; break;
         case prboom_6_compatibility:
-				     v = 214; 
+				     v = 214;
 				     longtics = 1;
 				     break;
         default: I_Error("G_BeginRecording: PrBoom compatibility level unrecognised?");
@@ -3697,7 +3697,7 @@ void G_SaveRestoreGameOptions(int save)
     {1, 0, &help_friends},
     {1, 0, &dog_jumping},
     {1, 0, &monkeys},
-  
+
     {2, 0, (int*)&forceOldBsp},
     {-1, -1, NULL}
   };
@@ -3908,7 +3908,7 @@ const byte* G_ReadDemoHeaderEx(const byte *demo_p, size_t size, unsigned int par
         for (i = 0; demo_p < string_end; i++)
         {
           char cur = *demo_p++;
-          
+
           if (cur < '0' || cur > '9')
           {
             if (cur != 0)
@@ -3967,7 +3967,7 @@ const byte* G_ReadDemoHeaderEx(const byte *demo_p, size_t size, unsigned int par
       {
         I_Error("G_ReadDemoHeader: Unable to determine map for UMAPINFO demo.");
       }
-    
+
       demo_p = string_end;
     }
 
@@ -4048,7 +4048,7 @@ const byte* G_ReadDemoHeaderEx(const byte *demo_p, size_t size, unsigned int par
           map = *demo_p++;
           deathmatch = respawnparm = fastparm =
             nomonsters = consoleplayer = 0;
-          
+
           // e6y
           // Ability to force -nomonsters and -respawn for playback of 1.2 demos.
           // Demos recorded with Doom.exe 1.2 did not contain any information
@@ -4233,7 +4233,7 @@ const byte* G_ReadDemoHeaderEx(const byte *demo_p, size_t size, unsigned int par
 
     if (demo_playerscount > 0 && demolength > 0)
     {
-      do        
+      do
       {
         demo_tics_count++;
         p += bytes_per_tic;
@@ -4242,8 +4242,8 @@ const byte* G_ReadDemoHeaderEx(const byte *demo_p, size_t size, unsigned int par
 
       demo_tics_count /= demo_playerscount;
 
-      sprintf(demo_len_st, "\x1b\x35/%d:%02d", 
-        demo_tics_count/TICRATE/60, 
+      sprintf(demo_len_st, "\x1b\x35/%d:%02d",
+        demo_tics_count/TICRATE/60,
         (demo_tics_count%(60*TICRATE))/TICRATE);
     }
   }
@@ -4296,7 +4296,7 @@ dboolean G_CheckDemoStatus (void)
     {
       demorecording = false;
       fputc(DEMOMARKER, demofp);
-      
+
       //e6y
       G_WriteDemoFooter(demofp);
       fclose(demofp);
@@ -4524,7 +4524,7 @@ void G_ReadDemoContinueTiccmd (ticcmd_t* cmd)
   if (!demo_continue_p)
     return;
 
-  if (gametic <= demo_tics_count && 
+  if (gametic <= demo_tics_count &&
     demo_continue_p + bytes_per_tic <= demobuffer + demolength &&
     *demo_continue_p != DEMOMARKER)
   {

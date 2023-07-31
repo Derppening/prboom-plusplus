@@ -100,7 +100,7 @@ void I_StartTic (void);
 void I_StartFrame (void);
 
 extern int use_fullscreen;  /* proff 21/05/2000 */
-extern int desired_fullscreen; //e6y
+extern bool desired_fullscreen; //e6y
 extern int exclusive_fullscreen;
 
 void I_UpdateRenderSize(void);	// Handle potential
@@ -114,7 +114,7 @@ extern int process_priority;
 // Use vanilla keybaord mapping
 extern int vanilla_keymap;
 
-extern dboolean window_focused;
+extern bool window_focused;
 void UpdateGrab(void);
 
 #ifdef __cplusplus

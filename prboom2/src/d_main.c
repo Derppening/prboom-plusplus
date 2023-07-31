@@ -435,7 +435,7 @@ void D_Display (fixed_t frac)
 
   // e6y
   // Don't thrash cpu during pausing or if the window doesnt have focus
-  if ( (paused && !walkcamera.type) || (!window_focused) ) {
+  if ( (paused && !walkcamera.type) || !window_focused) {
     I_uSleep(5000);
   }
 
