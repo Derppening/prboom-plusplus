@@ -47,6 +47,7 @@ extern "C" {
  *  action functions cleanly.
  */
 // killough 11/98: convert back to C instead of C++
+// TODO: Use a variant
 typedef  void (*actionf_t)();
 
 //e6y: for boom's friction code

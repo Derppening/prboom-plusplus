@@ -102,7 +102,7 @@ int avi_shot_time;
 int avi_shot_num;
 const char *avi_shot_fname;
 
-dboolean doSkip;
+bool doSkip;
 dboolean demo_stoponnext;
 dboolean demo_stoponend;
 static dboolean demo_warp;
@@ -1255,7 +1255,7 @@ int levelstarttic;
 
 int force_singletics_to = 0;
 
-int HU_DrawDemoProgress(int force)
+bool HU_DrawDemoProgress(int force)
 {
   static unsigned int last_update = 0;
   static int prev_len = -1;

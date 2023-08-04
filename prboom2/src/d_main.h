@@ -34,34 +34,37 @@
 #ifndef __D_MAIN__
 #define __D_MAIN__
 
+#ifndef __cplusplus
+#include <stdbool.h>
+#endif  // __cplusplus
+
 #include "m_fixed.h"
 #include "d_event.h"
 #include "w_wad.h"
+#include "support.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif  // __cplusplus
+PRBOOM_C_DECLS_BEGIN
 
 /* CPhipps - removed wadfiles[] stuff to w_wad.h */
 
 extern char *basesavegame;      // killough 2/16/98: savegame path
 
 //jff 1/24/98 make command line copies of play modes available
-extern dboolean clnomonsters; // checkparm of -nomonsters
-extern dboolean clrespawnparm;  // checkparm of -respawn
-extern dboolean clfastparm; // checkparm of -fast
+extern bool clnomonsters; // checkparm of -nomonsters
+extern bool clrespawnparm;  // checkparm of -respawn
+extern bool clfastparm; // checkparm of -fast
 //jff end of external declaration of command line playmode
 
-extern dboolean nosfxparm;
-extern dboolean nomusicparm;
-extern dboolean umapinfo_loaded;
+extern bool nosfxparm;
+extern bool nomusicparm;
+extern bool umapinfo_loaded;
 extern int ffmap;
 
 // Called by IO functions when input is detected.
-void D_PostEvent(event_t* ev);
+PRBOOM_C_DECL void D_PostEvent(event_t* ev);
 
 // Demo stuff
-extern dboolean advancedemo;
+extern bool advancedemo;
 void D_AdvanceDemo(void);
 void D_DoAdvanceDemo (void);
 
@@ -84,8 +87,12 @@ const char *BaseName(const char *filename);
 #define MAXLOADFILES 3
 extern const char *wad_files[MAXLOADFILES], *deh_files[MAXLOADFILES];
 
+PRBOOM_C_DECLS_END
+
 #ifdef __cplusplus
-}  // extern "C"
+
+void D_PostEvent(event_t& ev);
+
 #endif  // __cplusplus
 
 #endif

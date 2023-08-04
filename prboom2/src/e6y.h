@@ -92,7 +92,7 @@ extern int avi_shot_time;
 extern int avi_shot_num;
 extern const char *avi_shot_fname;
 
-extern dboolean doSkip;
+extern bool doSkip;
 extern dboolean demo_stoponnext;
 extern dboolean demo_stoponend;
 
@@ -331,7 +331,7 @@ extern int levelstarttic;
 
 extern int force_singletics_to;
 
-int HU_DrawDemoProgress(int force);
+bool HU_DrawDemoProgress(int force);
 
 #ifdef _WIN32
 int GetFullPath(const char* FileName, const char* ext, char *Buffer, size_t BufferLength);

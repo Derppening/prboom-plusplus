@@ -155,7 +155,7 @@ int fake_contrast;
 // killough 3/20/98, 4/4/98: end dynamic colormaps
 
 //e6y: for Boom colormaps in OpenGL mode
-dboolean use_boom_cm;
+bool use_boom_cm;
 int boom_cm;         // current colormap
 int frame_fixedcolormap = 0;
 
@@ -437,7 +437,7 @@ static void R_InitLightTables (void)
 // The change will take effect next refresh.
 //
 
-dboolean setsizeneeded;
+bool setsizeneeded;
 int     setblocks;
 
 void R_SetViewSize(int blocks)

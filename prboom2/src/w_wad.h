@@ -36,6 +36,12 @@
 #define __W_WAD__
 
 #ifdef __cplusplus
+#include <cstddef>
+#else
+#include <stddef.h>
+#endif  // __cplusplus
+
+#ifdef __cplusplus
 extern "C" {
 #endif  // __cplusplus
 

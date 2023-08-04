@@ -148,9 +148,9 @@ int saveCharIndex;   // which char we're editing
 // old save description before edit
 char saveOldString[SAVESTRINGSIZE];
 
-dboolean inhelpscreens; // indicates we are in or just left a help screen
+bool inhelpscreens; // indicates we are in or just left a help screen
 
-dboolean BorderNeedRefresh;
+bool BorderNeedRefresh;
 
 enum menuactive_e menuactive;    // The menus are up
 

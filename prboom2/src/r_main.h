@@ -124,7 +124,7 @@ extern const lighttable_t **colormaps;
 // killough 3/20/98, 4/4/98: end dynamic colormaps
 
 //e6y: for Boom colormaps in OpenGL mode
-extern dboolean use_boom_cm;
+extern bool use_boom_cm;
 extern int boom_cm;         // current colormap
 extern int frame_fixedcolormap;
 

@@ -65,7 +65,7 @@
 #include "v_video.h"
 #include "w_wad.h"
 
-extern dboolean gamekeydown[];
+extern bool gamekeydown[];
 
 // jff 1/7/98 default automap colors added
 int mapcolor_back;                          // map background

@@ -25,7 +25,7 @@ set(COMMON_SRC
     d_event.h
     d_items.cpp
     d_items.h
-    d_main.c
+    d_main.cpp
     d_main.h
     d_net.h
     d_player.h

@@ -56,7 +56,7 @@ extern "C" {
 
 // TODO(Derppening): Change this to bool when ready - Too many places cast dboolean* into int*, which breaks when using
 //  bool instead of int
-//typedef bool dboolean;
+//typedef alignas(int) bool dboolean;
 typedef int dboolean;
 typedef unsigned char byte;
 #endif

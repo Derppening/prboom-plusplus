@@ -41,7 +41,7 @@
 
 #include "m_io.h"
 
-int capturing_video = 0;
+bool capturing_video = false;
 static const char *vid_fname;
 
 
@@ -505,19 +505,19 @@ void I_CapturePrep (const char *fn)
   if (!parsecommand (soundpipe.command, cap_soundcommand, sizeof(soundpipe.command)))
   {
     lprintf (LO_ERROR, "I_CapturePrep: malformed command %s\n", cap_soundcommand);
-    capturing_video = 0;
+    capturing_video = false;
     return;
   }
   if (!parsecommand (videopipe.command, cap_videocommand, sizeof(videopipe.command)))
   {
     lprintf (LO_ERROR, "I_CapturePrep: malformed command %s\n", cap_videocommand);
-    capturing_video = 0;
+    capturing_video = false;
     return;
   }
   if (!parsecommand (muxpipe.command, cap_muxcommand, sizeof(muxpipe.command)))
   {
     lprintf (LO_ERROR, "I_CapturePrep: malformed command %s\n", cap_muxcommand);
-    capturing_video = 0;
+    capturing_video = false;
     return;
   }
 
@@ -525,7 +525,7 @@ void I_CapturePrep (const char *fn)
   if (!my_popen3 (&soundpipe))
   {
     lprintf (LO_ERROR, "I_CapturePrep: sound pipe failed\n");
-    capturing_video = 0;
+    capturing_video = false;
     return;
   }
   lprintf (LO_INFO, "I_CapturePrep: opening pipe \"%s\"\n", videopipe.command);
@@ -533,12 +533,12 @@ void I_CapturePrep (const char *fn)
   {
     lprintf (LO_ERROR, "I_CapturePrep: video pipe failed\n");
     my_pclose3 (&soundpipe);
-    capturing_video = 0;
+    capturing_video = false;
     return;
   }
   I_SetSoundCap ();
   lprintf (LO_INFO, "I_CapturePrep: video capture started\n");
-  capturing_video = 1;
+  capturing_video = true;
 
   // start reader threads
   soundpipe.stdoutdumpname = "sound_stdout.txt";
@@ -601,7 +601,7 @@ void I_CaptureFinish (void)
 
   if (!capturing_video)
     return;
-  capturing_video = 0;
+  capturing_video = false;
 
   // on linux, we have to close videopipe first, because it has a copy of the write
   // end of soundpipe_stdin (so that stream will never see EOF).

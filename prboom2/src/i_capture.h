@@ -31,6 +31,10 @@
 #ifndef __I_CAPTURE__
 #define __I_CAPTURE__
 
+#ifndef __cplusplus
+#include <stdbool.h>
+#endif  // __cplusplus
+
 #ifdef __cplusplus
 extern "C" {
 #endif  // __cplusplus
@@ -51,7 +55,7 @@ extern int cap_frac;
 extern int cap_wipescreen;
 
 // true if we're capturing video
-extern int capturing_video;
+extern bool capturing_video;
 
 // init and open sound, video pipes
 // fn is filename passed from command line, typically final output file

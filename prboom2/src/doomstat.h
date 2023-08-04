@@ -55,10 +55,10 @@ extern "C" {
 // Command line parameters.
 //
 
-extern  dboolean nomonsters; // checkparm of -nomonsters
-extern  dboolean respawnparm;  // checkparm of -respawn
-extern  dboolean fastparm; // checkparm of -fast
-extern  dboolean devparm;  // DEBUG: launched with -devparm
+extern  bool nomonsters; // checkparm of -nomonsters
+extern  bool respawnparm;  // checkparm of -respawn
+extern  bool fastparm; // checkparm of -fast
+extern  bool devparm;  // DEBUG: launched with -devparm
 
 // -----------------------------------------------------
 // Game Mode - identify IWAD as shareware, retail etc.
@@ -308,7 +308,7 @@ extern  int             mouseSensitivity_horiz; // killough
 extern  int             mouseSensitivity_vert;
 
 // debug flag to cancel adaptiveness
-extern  dboolean         singletics;
+extern  bool             singletics;
 
 extern  int             bodyqueslot;
 

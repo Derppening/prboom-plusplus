@@ -293,7 +293,7 @@ fixed_t sidemove_strafe50[2]  = {0x19, 0x32};
 
 // CPhipps - made lots of key/button state vars static
 //e6y static
-dboolean gamekeydown[NUMKEYS];
+bool gamekeydown[NUMKEYS];
 static int     turnheld;       // for accelerative turning
 
 // Set to -1 or +1 to switch to the previous or next weapon.
@@ -1912,7 +1912,7 @@ void G_DoWorldDone (void)
 
 #define MIN_MAXPLAYERS 32
 
-extern dboolean setsizeneeded;
+extern bool setsizeneeded;
 
 //CPhipps - savename variable redundant
 
